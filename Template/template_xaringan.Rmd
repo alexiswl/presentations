@@ -1,0 +1,14 @@
+---
+title: "Presentation %name%"
+subtitle: ""
+author: "%author%"
+date: "%date%"
+output:
+  xaringan::moon_reader:
+    css: "libs/remark-css-0.0.1/%name%.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: pygments
+      highlightLines: true
+      countIncrementalSlides: false
+---
