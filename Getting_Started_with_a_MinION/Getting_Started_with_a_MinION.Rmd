@@ -48,40 +48,44 @@ And that the sample is of the distribution that we expect.
 # More is more (when using HMW)
 
 A 1 µg starting input is standard protocol since 8kb at 1 µg ~ 0.2 pmol.
-Reactions are based on the number of available ends.
+Reactions throughout the library prep and sequencing are based on the number of available ends.
 
 ==> a HMW library of 50 kb requries an input of 6 µg to achieve equal molarity.
 
 ???
 
-Math equation goes here on picomol.
 
 # 'Mix by pipetting'
 
 Either don't mix by pipetting, or use wide-bore pipettes.
 
+70% ethanol can be increased to 80% ethanol for bead-clean ups.
+
+When using a high starting input, increase stringency on bead-clean ups (0.4X)
+
+???
+
+Great care should be taken throughout the library prep.
+Mixing using regular pipette tips can damage a library.
+Increasing stringency on bead cleanups can reduce the number of short fragements in a library.
+When a high starting input is used with HMW, you will break more, so you need to clean more. 
+
 ---
 
 # Some further tips
 
-Storing flowcells the right way. The will last longer.
-Bubbles are very bad.
+* Storing flowcells the right way. The will last longer.
+* Bubbles are very bad.
 
 ???
 
 Picture of bubble on flowcell.
+http://www.science-practice.com/blog/2016/05/18/york-minion/
 
 ---
 
-# The data pipeline.
-
-<img src=images/pipeline.png width="120%">
-
-???
-
-https://twitter.com/biomickwatson/status/647395496114450432
-https://www.drive5.com/usearch/manual/fastq_fig.jpg
-
+# Protocols IO
+# Josh quicks library.
 
 ---
 
@@ -92,26 +96,40 @@ https://www.drive5.com/usearch/manual/fastq_fig.jpg
 
 SCOTT'S SLIDE
 
-
 ---
 
-# Protocols IO
-# Josh quicks library.
+# The nanopore processing pipeline.
+
+<img src=images/pipeline.png width="120%">
+
+
+https://twitter.com/biomickwatson/status/647395496114450432
+https://www.drive5.com/usearch/manual/fastq_fig.jpg
 
 ---
 
 # What's in a fast5?
 
+???
+
+It is possible to run a nanopore sequencing device mulitple types without ever actually seeing the inside of a fast5.
+For what a .bcl file is to Illumina, a .fast5 file is to nanopore. 
+Other than the squiggle data as shown above, there are a few other metrics in the fast5 file that may be of interest.
+
 
 ---
 
-# Data analysis.
+# Basecalling: From .fast5 to .fastq.
 
 Basecalling, is computationally intensive, regardless of the algorithm.
 
 You have a plethora of options, albacore, guppy and Metrichor.
-For high-quality samples, straight to the HPC.
+For high-quality yield, straight to the HPC.
 How do I place data on the HPC?
+
+---
+
+# Alignment algorithms
 
 ---
 
