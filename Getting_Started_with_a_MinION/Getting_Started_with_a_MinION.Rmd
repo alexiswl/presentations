@@ -1,8 +1,8 @@
 ---
 
-title: "Getting Started with a MinION"
+title: "Fantastic Hints and Where to Find Them"
 
-subtitle: ""
+subtitle: "Getting Started with a MinION"
 
 author: "Alexis_Lucattini"
 
@@ -24,44 +24,74 @@ output:
 
       countIncrementalSlides: false
       
-    self_contained: True
+    self_contained: no
+
+---
+
+# Quality Control
+
+Quantification.
+
+Purity.
+
+Distribution.
+
+???
+
+We take a three pronged approach to library preparation.
+We want to make sure that the sample mass is sufficient to start the prep.
+It's important that our sample is purely DNA or RNA with minimal salt concentration.
+And that the sample is of the distribution that we expect.
+
+---
+
+# More is more (when using HMW)
+
+A 1 µg starting input is standard protocol since 8kb at 1 µg ~ 0.2 pmol.
+Reactions are based on the number of available ends.
+
+==> a HMW library of 50 kb requries an input of 6 µg to achieve equal molarity.
+
+???
+
+Math equation goes here on picomol.
+
+# 'Mix by pipetting'
+
+Either don't mix by pipetting, or use wide-bore pipettes.
+
+---
+
+# Some further tips
+
+Storing flowcells the right way. The will last longer.
+Bubbles are very bad.
+
+???
+
+Picture of bubble on flowcell.
 
 ---
 
 # The data pipeline.
+
+<img src=images/pipeline.png width="120%">
+
+???
+
+https://twitter.com/biomickwatson/status/647395496114450432
+https://www.drive5.com/usearch/manual/fastq_fig.jpg
 
 
 ---
 
 # Chemistry history
 
----
 
-# Patience is a virtue
+???
 
+SCOTT'S SLIDE
 
-(Crap in Carp out joke no longer applies. Crap in, nothing out)
-
-This html is purely standalone. And can be found at the link below.
-Press 'P' to enter 'Presenter Mode' and view the notes.
-
----
-
-# Some further tips
-
-QC literally everything!
-Storing flowcells the right way. The will last.
-What's in a bubble.
-
----
-
-# More is more (when using HMW)
-
----
-
-# 'Mix by pipetting'
-
-Either don't mix by pipetting, or use wide-bore pipettes.
 
 ---
 
@@ -103,3 +133,6 @@ GIH.
 ---
 
 # Thank yous.
+
+This html is purely standalone. And can be found at the link below.
+Press 'P' to enter 'Presenter Mode' and view the notes.
