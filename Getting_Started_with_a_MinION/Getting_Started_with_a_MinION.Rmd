@@ -1,6 +1,6 @@
 ---
 
-title: "Presentation Getting_Started_with_a_MinION"
+title: "Getting Started with a MinION"
 
 subtitle: ""
 
@@ -23,6 +23,83 @@ output:
       highlightLines: true
 
       countIncrementalSlides: false
+      
+    self_contained: True
 
 ---
 
+# The data pipeline.
+
+
+---
+
+# Chemistry history
+
+---
+
+# Patience is a virtue
+
+
+(Crap in Carp out joke no longer applies. Crap in, nothing out)
+
+This html is purely standalone. And can be found at the link below.
+Press 'P' to enter 'Presenter Mode' and view the notes.
+
+---
+
+# Some further tips
+
+QC literally everything!
+Storing flowcells the right way. The will last.
+What's in a bubble.
+
+---
+
+# More is more (when using HMW)
+
+---
+
+# 'Mix by pipetting'
+
+Either don't mix by pipetting, or use wide-bore pipettes.
+
+---
+
+# Protocols IO
+# Josh quicks library.
+
+---
+
+# What's in a fast5?
+
+
+---
+
+# Data analysis.
+
+Basecalling, is computationally intensive, regardless of the algorithm.
+
+You have a plethora of options, albacore, guppy and Metrichor.
+For high-quality samples, straight to the HPC.
+How do I place data on the HPC?
+
+---
+
+# The Elephant in the Room.
+https://pbs.twimg.com/media/CClEkuLW0AAlzFE.jpg
+
+---
+
+# Latest chemistry and flowcells
+
+The latest chemistry and flowcells have shown some outstanding results.
+Because of the shear size of data, I've posted the first few minutes of the run to AARNET storage that one can download and added in a README to understand the download. It's around about 1G of data and so 
+
+---
+
+# Getting in Contact.
+GIH.
+
+---
+
+# Thank yous.
