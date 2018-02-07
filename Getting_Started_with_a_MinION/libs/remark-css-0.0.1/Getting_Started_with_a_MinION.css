@@ -1,12 +1,17 @@
 @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
 @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
 @import url(https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700);
+@import url(https://fonts.googleapis);
 
-body { font-family: 'Droid Serif', 'Palatino Linotype', 'Book Antiqua', Palatino, 'Microsoft YaHei', 'Songti SC', serif; }
+body { font-family: 'Droid Serif', 'Palatino Linotype', 'Book Antiqua', Palatino, 'Microsoft YaHei', 'Songti SC', serif; 
+}
 h1, h2, h3 {
   font-family: 'Yanone Kaffeesatz';
   font-weight: normal;
 }
+
+
+
 a, a > code {
   color: rgb(249, 38, 114);
   text-decoration: none;
@@ -33,7 +38,7 @@ a, a > code {
 .left-column {
   color: #777;
   width: 20%;
-  height: 92%;
+  /*height: 92%;*/
   float: left;
 }
 .left-column h2:last-of-type, .left-column h3:last-child {
@@ -42,7 +47,7 @@ a, a > code {
 .right-column {
   width: 75%;
   float: right;
-  padding-top: 1em;
+  /*padding-top: 1em;*/
 }
 .pull-left {
   float: left;
@@ -56,7 +61,7 @@ a, a > code {
   clear: both;
 }
 img, video, iframe {
-  max-width: 100%;
+  /*max-width: 100%;*/
 }
 blockquote {
   border-left: solid 5px lightgray;
@@ -68,3 +73,22 @@ blockquote {
 .tiny {
   font-size: 40%
 }
+
+
+/* Default background colour, and font size */
+.remark-slide-content{
+                       padding-top: 4.2em;
+                       padding-left: 100px;
+                       padding-right: 100px;
+                       background-image: url("../../images/agrf_logo.png");
+                       background-size: cover;
+                       font-size: 220%;    /* Regular text */
+                       padding-bottom: 1em;
+                       
+                     }
+.li {padding-top:-2em}
+.ul {padding-top:-2em}
+
+.remark-slide-number {
+                       padding-bottom: 1em;
+                     }

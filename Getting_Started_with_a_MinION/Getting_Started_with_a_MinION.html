@@ -3,72 +3,171 @@
   <head>
     <title></title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="libs/remark-css-0.0.1/Getting_Started_with_a_MinION.css" type="text/css" />
+    <link rel="stylesheet" href="libs\remark-css-0.0.1\Getting_Started_with_a_MinION.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 
 
-# The data pipeline.
+# Chemistry history
 
-&lt;img src=images/pipeline.png width="120%"&gt;
+.pull-left[
+.center[R7 to R9.4]
+&lt;img src=images/yield_plots_old.png width=110%&gt;
+]
+.pull-right[
+.center[R9.4 April-2017]
+&lt;img src=images/yield_plots_latest.png width=110%&gt;
+]
+
+???
+
+SCOTT'S SLIDE
+
+---
+
+# Quality Control
+
+Quantification.
+
+Purity.
+
+Distribution.
+
+???
+
+We take a three pronged approach to library preparation.
+We want to make sure that the sample mass is sufficient to start the prep.
+It's important that our sample is purely DNA or RNA with minimal salt concentration.
+And that the sample is of the distribution that we expect.
+
+---
+
+# More is more (when using HMW)
+
+A 1 µg starting input is standard protocol...  
+
+$$\text{if } \frac{1\ \mathrm{µg}}{8\ \mathrm{kb}} \approx 0.2\ \mathrm{pmol} $$
+
+$$\therefore \frac{50\ \mathrm{kb}}{0.2\ \mathrm{pmol}} \approx 6\ \mathrm{µg} $$
+
+???
+
+Reactions throughout the library prep and sequencing are based on the number of available ends.
+==&gt; a HMW library of 50 kb requries an input of 6 µg to achieve equal molarity.
+
+---
+
+# 'Mix by pipetting'
+
+* DON'T!  
+   + .small[Or use wide-bore pipettes only.]  
+* 70% - 80% Ethanol.  &lt;br&gt;&lt;br&gt;
+* Lower ratio on bead-clean ups  
+   + .small[0.4X for HMW DNA]
+???
+
+Great care should be taken throughout the library prep.
+Mixing using regular pipette tips can damage a library.
+Increasing stringency on bead cleanups can reduce the number of short fragements in a library.
+When a high starting input is used with HMW, you will break more, so you need to clean more. 
+
+---
+
+# Some further tips
+
+.pull-left[
+
+Storing flowcells
+   * .small[Avoid dynamic fridges]
+   * .small[Insulate from cycles]
+]
+
+.pull-right[
+
+Bubbles are bad.
+   &lt;img src=http://www.science-practice.com/assets/york-minion/flowcell.jpg
+    width="120%"&gt;
+]
+
+???
+
+A frozen flowcell is a bad flowcell. 
+Flowcells should be kept at the same frigerated temperature. 
+Fridges that cycle will reduce the lifespan of these flowcells.
+The back of the fridge can sometimes freeze. Avoid placing flowcells there.
+Flowcells should be layed completely flat, to prevent bubbles and prevent further damage from bubbles.
+
+Any region of the flowcell that has been exposed to air is destroyed.
+In your early days of priming you will probably do this unintentionally.
+Practise priming with a used flowcell.
+
+
+---
+
+
+# Experiment on an experiment.
+
+Reduce library-prep time with the  
+One-pot ligation from Josh Quick (UK)
+
+&lt;a href="https://www.protocols.io/protocols?key=nanopore"&gt;&lt;img src="https://synbiobeta.com/wp-content/uploads/sites/4/2016/10/protocols.io_.jpg"&gt;&lt;/a&gt;
+
+
+
+---
+
+
+class: center
+
+# The nanopore processing pipeline.
+
+&lt;img src=images/pipeline.png width="110%" float="left"&gt;
 
 ???
 
 https://twitter.com/biomickwatson/status/647395496114450432
 https://www.drive5.com/usearch/manual/fastq_fig.jpg
 
-
----
-
-# Chemistry history
-
----
-
-# Patience is a virtue
-
-
-(Crap in Carp out joke no longer applies. Crap in, nothing out)
-
-
-
----
-
-# Some further tips
-
-QC literally everything!
-Storing flowcells the right way. The will last.
-What's in a bubble.
-
----
-
-# More is more (when using HMW)
-
----
-
-# 'Mix by pipetting'
-
-Either don't mix by pipetting, or use wide-bore pipettes.
-
----
-
-# Protocols IO
-# Josh quicks library.
-
 ---
 
 # What's in a fast5?
 
+???
+
+It is possible to run a nanopore sequencing device mulitple types without ever actually seeing the inside of a fast5.
+The .fast5 format is based on the hdf5 format from https://support.hdfgroup.org/HDF5/
+For what a .bcl file is to Illumina, a .fast5 file is to nanopore. 
+Other than the squiggle data as shown above, there are a few other metrics in the fast5 file that may be of interest.
+
 
 ---
 
-# Data analysis.
+# Basecalling: From .fast5 to .fastq.
 
-Basecalling, is computationally intensive, regardless of the algorithm.
+Basecalling, is computationally intensive, regardless of the software.
+
+Available software:
+
+
+
+???
 
 You have a plethora of options, albacore, guppy and Metrichor.
-For high-quality samples, straight to the HPC.
+For high-quality yield, straight to the HPC.
 How do I place data on the HPC?
+
+---
+
+# Alignment algorithms
+
+Guppy, Albacore and Metrichor.
+
+...and a plethora of third-party options too!
+
+???
+
+Three ONT options are Guppy, Albacore and Metrichor.
 
 ---
 
@@ -100,8 +199,15 @@ Press 'P' to enter 'Presenter Mode' and view the notes.
 "highlightLines": true,
 "countIncrementalSlides": false
 });
-if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});
-(function() {var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler"); if (!r) return; s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }"; d.head.appendChild(s);})();</script>
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
