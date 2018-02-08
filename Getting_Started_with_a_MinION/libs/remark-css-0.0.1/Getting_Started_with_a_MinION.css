@@ -10,6 +10,7 @@ h1, h2, h3 {
   font-weight: normal;
 }
 
+
 h2{
   margin-bottom: 0px;
 }
@@ -71,8 +72,11 @@ blockquote {
 .small {
   font-size: 70%
 }
+.kinda-small {
+  font-size: 55%;
+}
 .tiny {
-  font-size: 40%
+  font-size: 45%
 }
 
 .h1-with-images h1 {
@@ -94,9 +98,45 @@ blockquote {
                        padding-bottom: 1em;
                        
                      }
+                     
+.genomics-innovationh-hub{
+                       padding-top: 5.5em;
+                       padding-left: 100px;
+                       padding-right: 100px;
+                       background-image: url("../../images/gih_background.png");
+                       background-size: cover;
+                       font-size: 170%;    /* Regular text */
+                       padding-bottom: 1em;    
+}
+
 .li {padding-top:-2em}
 .ul {padding-top:-2em}
 
 .remark-slide-number {
                        padding-bottom: 1em;
                      }
+
+.genomics-innovationh-hub .remark-slide-number{
+    padding-bottom: 0.2em;
+}
+
+table {
+  margin: auto;
+  border-top: 1px solid #666;
+  border-bottom: 1px solid #666;
+}
+table thead th { border-bottom: 1px solid #ddd; }
+th, td { padding: 5px; }
+tr:nth-child(even) { background: #eee }
+
+.title-slide {
+  background-image: url(https://upload.wikimedia.org/wikipedia/commons/3/39/Naruto_Shiki_Fujin.svg);
+  background-size: cover;
+}
+
+
+.title-slide .remark-slide-number {
+  display: none;
+}
+
+

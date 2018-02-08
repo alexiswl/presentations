@@ -1,31 +1,17 @@
 ---
-
-title: "Fantastic Hints and Where to Find Them"
-
-subtitle: "Getting Started with a MinION"
-
-author: "Alexis_Lucattini"
-
-date: "Tue 06 Feb 2018"
-
+title: "Fantastic Hints"
+subtitle: "and where to find them"
+author: "Alexis Lucattini"
+date: "Fri 09 Feb 2018"
 output:
-
   xaringan::moon_reader:
-
     css: "libs/remark-css-0.0.1/Getting_Started_with_a_MinION.css"
-
     lib_dir: libs
-
     nature:
-
       highlightStyle: pygments
-
       highlightLines: true
-
       countIncrementalSlides: false
-      
     self_contained: no
-
 ---
 
 ## Chemistry history 
@@ -49,11 +35,12 @@ Recently announced are R9.4.1 and R9.5.1 which we are yet to run.
 
 # Quality Control
 
-Quantification.
-
-Purity.
-
-Distribution.
+* Quantification.
+    + Qubit
+* Purity.
+    + Nanodrop
+* Distribution.
+    + TapeStation
 
 ???
 
@@ -64,25 +51,25 @@ And that the sample is of the distribution that we expect.
 
 ---
 
-# More is more (when using HMW)
+.my-header[<h1 style="display:inline;top:100px;" >More is more:</h1> <h3 style="display:inline;">when using HMW</h3>]
 
-A 1 µg starting input is standard protocol...  
+A 1 $\mathrm{\mu}$g starting input is standard protocol...  
 
-$$\text{if } \frac{1\ \mathrm{µg}}{8\ \mathrm{kb}} \approx 0.2\ \mathrm{pmol} $$
+$$\text{if } \frac{1\ \mathrm{\mu g}}{8\ \mathrm{kb}} \approx 0.2\ \mathrm{pmol} $$
 
-$$\therefore \frac{50\ \mathrm{kb}}{0.2\ \mathrm{pmol}} \approx 6\ \mathrm{µg} $$
+$$\therefore \frac{50\ \mathrm{kb}}{0.2\ \mathrm{pmol}} \approx 6\ \mathrm{\mu g} $$
 
 ???
 
 Reactions throughout the library prep and sequencing are based on the number of available ends.
-A HMW library of 50 kb requries an input of 6 µg to achieve equal molarity of a 8kb library of 1µg  
+A HMW library of 50 kb requries an input of 6 ?g to achieve equal molarity of a 8kb library of 1?g  
 
 ---
 
 # 'Mix by pipetting'
 
 * DON'T!  
-   + .small[Or use wide-bore pipettes only.]  
+   + .small[Or use wide-bore pipettes only.]<br><br>  
 * 70% - 80% Ethanol.  <br><br>
 * Lower ratio on bead-clean ups  
    + .small[0.4X for HMW DNA]
@@ -127,15 +114,11 @@ Practise priming with a used flowcell.
 
 ---
 
+## Protocols are just guidelines...
 
-# Experiment on an experiment.
-
-Reduce library-prep time with the  
-One-pot ligation from Josh Quick (UK)
+<a href="https://docs.google.com/document/d/1iBIiQIPCZQRZ13lBuv7MJL9OIs1KPooomqGkQcoywwg/edit">One-Pot ligation</a> from Josh Quick (UK)
 
 <a href="https://www.protocols.io/protocols?key=nanopore"><img src="https://synbiobeta.com/wp-content/uploads/sites/4/2016/10/protocols.io_.jpg"></a>
-
-
 
 ---
 
@@ -160,8 +143,8 @@ https://www.drive5.com/usearch/manual/fastq_fig.jpg
 
 class: h1-with-images
 
-<h1>What The Fast5? </h1> 
-<img margin-top=0px src=images/fast5_file.png width="65%">
+.center[<h1>What The Fast5? </h1> 
+<img margin-top=0px src=images/fast5_file.png width="65%">]
 
 ???
 
@@ -175,16 +158,18 @@ Other than the squiggle data as shown above, there are a few other metrics in th
 
 .my-header[<h1 style="display:inline;top:100px;" >Basecalling:</h1> <h3 style="display:inline;">From .fast5 to .fastq.</h3>]
 
-All basecalling, is computationally intensive.  
-Head to <a href="https://github.com/rrwick/Basecalling-comparison">Ryan Wick's Github</a> for detailed information.
+All basecalling, is computationally intensive <a href="https://github.com/alexiswl/poreduck">.small[(use a HPC)]</a>.
+
+Head to <a href="https://github.com/rrwick/Basecalling-comparison">Ryan Wick's Github</a> for detailed information on aligners.
 
 ```{r basecalling_table, echo=FALSE, message=FALSE, results='asis'}
 require(magrittr)
+options(knitr.table.format = "html") 
 tibble::data_frame(BaseCallers=c("Albacore", "Guppy"),
                    Optimised=c("CPU", "GPU"),
-                   Plus=c("Common", "Speed")) %>%
+                   Bonus=c("Common", "Fast")) %>%
 knitr::kable(format='html') %>%
-kableExtra::kable_styling("striped", "hover")
+kableExtra::kable_styling(full_width=TRUE)
 ```
 
 
@@ -193,39 +178,104 @@ kableExtra::kable_styling("striped", "hover")
 You have a plethora of options, albacore, guppy and Metrichor.
 For high-quality yield, straight to the HPC.
 How do I place data on the HPC?
+Either https://github.com/alexiswl/poreduck
+Or Nick Lomans helpful hints: https://github.com/nickloman/nanopore-basecalling-scripts
 
 ---
 
 # Alignment algorithms
 
-Guppy, Albacore and Metrichor.
+The alignment parameters for nanopore reads are different to that of other sequencing machines.
 
-...and a plethora of third-party options too!
+* Minimap2 
+
+* bwa-mem
+
+* GraphMap
 
 ???
 
-Three ONT options are Guppy, Albacore and Metrichor.
+Alignment algorithms for nanopore are different to those from standard Illumina reads. 
+Illumina reads are more accurate, but shorter, requires a different approach.
+
+
 
 ---
 
-# The Elephant in the Room.
-https://pbs.twimg.com/media/CClEkuLW0AAlzFE.jpg
+.center[<h1> The Elephant in the Room </h1>
+<img src=https://pbs.twimg.com/media/CClEkuLW0AAlzFE.jpg width=80%>
+]
+
+???
+
+We got our PromethION on the 21st of July last year.
+It has been a slow progress but we have started to see some results.
 
 ---
 
-# Latest chemistry and flowcells
+.center[<h1>LAMBDA : LSK108 : Feb 18</h1>
+<img src=images/yield_promethion_20180202.png width=45%>
+]
 
-The latest chemistry and flowcells have shown some outstanding results.
-Because of the shear size of data, I've posted the first few minutes of the run to AARNET storage that one can download and added in a README to understand the download. It's around about 1G of data and so 
+???
+
+This is our yield from our lambda run last Friday.
+As we hadn't basecalled at this point, we weren't aware that the yield was continuing to rise. ONT contacted us and said, would you mind restarting the run for another 16 hours. We'd like to see if we can hit 50 Gb.
 
 ---
 
-# Getting in Contact.
-GIH.
+class: genomics-innovationh-hub, gih-slide-number
+
+<img src=images/gih_partnerships.png width=110%>
 
 ---
 
-# Thank yous.
+class: genomics-innovationh-hub, gih-slide-number
 
-This html is purely standalone. And can be found at the link below.
-Press 'P' to enter 'Presenter Mode' and view the notes.
+# Hub Goals
+
+* Building innovation ecosystems.
+* Stepping up to the innovation challenge.
+* Providing access to state-of-the-art technologies
+* Managing cost efficiency
+
+.pull-right[
+Contact: <a href="mailto:azadeh.seidi@agrf.org.au">Azadeh Saedi</a>
+.kinda-small[Website: <a href="https://genomicsinnovationhub.org.au">GenomicsInnovationHub.org.au</a>]]
+
+
+???
+
+* Building innovation ecosystems: 
+    + through common research, collaboration, education and technology development.
+* Stepping up to the innovation challenge: 
+    + bringing resources together to diffuse cutting-edge genomic technologies.
+* Providing access to state-of-the-art technologies: 
+    + access to Australiaâ€™s first 10X Genomics Chromium system, as well as early access to cutting-edge technologies such as the Oxford Nanopore Technologies PromethION.
+* Managing cost efficiency: 
+    + open access to a portfolio of cutting-edge technologies and competencies.
+---
+
+.pull-left[
+* R&D:
+    + Azadeh Saedi
+    + Ken McGrath
+    + Kirby Siemering
+    + Lavinia Gordon
+* Lab Ops:
+    + Matthew Tinning
+* IT:
+    + Chris Hunt
+    + Douglas Morrison
+    + Gismon Thomas
+* PR:
+    + Desley Pitcher
+]
+
+.pull-right[
+* WEHI
+    + Matthew Ritchie
+    + Quentin Gouil
+    + Scott Gigante
+    + Chris Woodruff
+]
