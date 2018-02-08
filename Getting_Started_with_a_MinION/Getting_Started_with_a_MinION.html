@@ -9,20 +9,22 @@
     <textarea id="source">
 
 
-# Chemistry history
-
-.pull-left[
-.center[R7 to R9.4]
-&lt;img src=images/yield_plots_old.png width=110%&gt;
+## Chemistry history 
+.left-column[.center[R7 to R9.4]
+&lt;img src=images/yield_plots_old.png width=100%&gt;
+.center[.tiny[Image Credit Scott Gigante]]
 ]
-.pull-right[
-.center[R9.4 April-2017]
+.pull-right[.center[R9.4 April-2017]  
 &lt;img src=images/yield_plots_latest.png width=110%&gt;
 ]
 
+
 ???
 
-SCOTT'S SLIDE
+When we first started using a MinION, a good run was around 400 Mb of data.
+We celebrated in the 1GB club using the R9 chemistry in June 2016 and then found 10 GB in April last year.
+Our R9.5 runs were actually a bit lower than the R9.4. This has been a common finding of regular nanopore users.
+Recently announced are R9.4.1 and R9.5.1 which we are yet to run.
 
 ---
 
@@ -54,7 +56,7 @@ $$\therefore \frac{50\ \mathrm{kb}}{0.2\ \mathrm{pmol}} \approx 6\ \mathrm{µg} 
 ???
 
 Reactions throughout the library prep and sequencing are based on the number of available ends.
-==&gt; a HMW library of 50 kb requries an input of 6 µg to achieve equal molarity.
+A HMW library of 50 kb requries an input of 6 µg to achieve equal molarity of a 8kb library of 1µg  
 
 ---
 
@@ -65,6 +67,7 @@ Reactions throughout the library prep and sequencing are based on the number of 
 * 70% - 80% Ethanol.  &lt;br&gt;&lt;br&gt;
 * Lower ratio on bead-clean ups  
    + .small[0.4X for HMW DNA]
+
 ???
 
 Great care should be taken throughout the library prep.
@@ -120,18 +123,26 @@ One-pot ligation from Josh Quick (UK)
 
 class: center
 
-# The nanopore processing pipeline.
+# The nanopore pipeline.
 
 &lt;img src=images/pipeline.png width="110%" float="left"&gt;
 
 ???
+
+Prior to running any analysis on the data coming from the MinION,
+we need to basecall the data. That is converting the analogue signal here.
+
 
 https://twitter.com/biomickwatson/status/647395496114450432
 https://www.drive5.com/usearch/manual/fastq_fig.jpg
 
 ---
 
-# What's in a fast5?
+
+class: h1-with-images
+
+&lt;h1&gt;What The Fast5? &lt;/h1&gt; 
+&lt;img margin-top=0px src=images/fast5_file.png width="65%"&gt;
 
 ???
 
@@ -143,12 +154,32 @@ Other than the squiggle data as shown above, there are a few other metrics in th
 
 ---
 
-# Basecalling: From .fast5 to .fastq.
+.my-header[&lt;h1 style="display:inline;top:100px;" &gt;Basecalling:&lt;/h1&gt; &lt;h3 style="display:inline;"&gt;From .fast5 to .fastq.&lt;/h3&gt;]
 
-Basecalling, is computationally intensive, regardless of the software.
+All basecalling, is computationally intensive.  
+Head to &lt;a href="https://github.com/rrwick/Basecalling-comparison"&gt;Ryan Wick's Github&lt;/a&gt; for detailed information.
 
-Available software:
-
+&lt;table class="table table-striped" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; BaseCallers &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Optimised &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Plus &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Albacore &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; CPU &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Common &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Guppy &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; GPU &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Speed &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 
 
 ???

@@ -28,16 +28,15 @@ output:
 
 ---
 
-# Chemistry history
-
-.pull-left[
-.center[R7 to R9.4]
-<img src=images/yield_plots_old.png width=110%>
+## Chemistry history 
+.left-column[.center[R7 to R9.4]
+<img src=images/yield_plots_old.png width=100%>
+.center[.tiny[Image Credit Scott Gigante]]
 ]
-.pull-right[
-.center[R9.4 April-2017]
+.pull-right[.center[R9.4 April-2017]  
 <img src=images/yield_plots_latest.png width=110%>
 ]
+
 
 ???
 
@@ -143,7 +142,7 @@ One-pot ligation from Josh Quick (UK)
 
 class: center
 
-# The nanopore processing pipeline.
+# The nanopore pipeline.
 
 <img src=images/pipeline.png width="110%" float="left">
 
@@ -158,7 +157,11 @@ https://www.drive5.com/usearch/manual/fastq_fig.jpg
 
 ---
 
-# What's in a fast5?
+
+class: h1-with-images
+
+<h1>What The Fast5? </h1> 
+<img margin-top=0px src=images/fast5_file.png width="65%">
 
 ???
 
@@ -170,12 +173,19 @@ Other than the squiggle data as shown above, there are a few other metrics in th
 
 ---
 
-# Basecalling: From .fast5 to .fastq.
+.my-header[<h1 style="display:inline;top:100px;" >Basecalling:</h1> <h3 style="display:inline;">From .fast5 to .fastq.</h3>]
 
-Basecalling, is computationally intensive, regardless of the software.
+All basecalling, is computationally intensive.  
+Head to <a href="https://github.com/rrwick/Basecalling-comparison">Ryan Wick's Github</a> for detailed information.
 
-Available software:
-
+```{r basecalling_table, echo=FALSE, message=FALSE, results='asis'}
+require(magrittr)
+tibble::data_frame(BaseCallers=c("Albacore", "Guppy"),
+                   Optimised=c("CPU", "GPU"),
+                   Plus=c("Common", "Speed")) %>%
+knitr::kable(format='html') %>%
+kableExtra::kable_styling("striped", "hover")
+```
 
 
 ???
