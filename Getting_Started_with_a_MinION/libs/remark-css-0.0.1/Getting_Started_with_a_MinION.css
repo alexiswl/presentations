@@ -98,6 +98,17 @@ blockquote {
                        padding-bottom: 1em;
                        
                      }
+
+.hint-slide{
+                       padding-top: 5.5em;
+                       padding-left: 100px;
+                       padding-right: 100px;
+                       background-image: url("../../images/agrf_logo_hint.png");
+                       background-size: cover;
+                       font-size: 170%;    /* Regular text */
+                       padding-bottom: 1em;
+                       
+                     }
                      
 .genomics-innovationh-hub{
                        padding-top: 5.5em;
