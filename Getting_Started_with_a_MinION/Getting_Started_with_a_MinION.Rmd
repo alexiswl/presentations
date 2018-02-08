@@ -36,11 +36,11 @@ Recently announced are R9.4.1 and R9.5.1 which we are yet to run.
 # Quality Control
 
 * Quantification.
-    + Qubit
+    + Qubit<br></br>
 * Purity.
-    + Nanodrop
+    + Nanodrop<br></br>
 * Distribution.
-    + TapeStation
+    + TapeStation<br></br>
 
 ???
 
