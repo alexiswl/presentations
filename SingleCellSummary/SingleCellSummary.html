@@ -1,30 +1,13 @@
----
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="libs\remark-css-0.0.1\SingleCellSummary.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
 
-title: "Single Cell Bioinformatics"
-
-subtitle: "A starter to bioinformatics in Single Cell"
-
-author: "Alexis Lucattini"
-
-date: "Thu 01 Mar 2018"
-
-output:
-
-  xaringan::moon_reader:
-
-    css: "libs/remark-css-0.0.1/SingleCellSummary.css"
-
-    lib_dir: libs
-
-    nature:
-
-      highlightStyle: pygments
-
-      highlightLines: true
-
-      countIncrementalSlides: false
-
----
 
 # Single Cell Bioinformatics: Where to start
 
@@ -76,13 +59,13 @@ Appropriate use-case would be tracking the cell-fates throughout a developmental
 
 ## Monocole plots - Gene expression in pseudotime  
 .center[
-<img src=http://cole-trapnell-lab.github.io/monocle-release/images/vignette/plot_diff_res_pt-1.png width="70%">
+&lt;img src=http://cole-trapnell-lab.github.io/monocle-release/images/vignette/plot_diff_res_pt-1.png width="70%"&gt;
 ]
 ---
 
 ## Monocole plots - Gene expression between cell-types
 
-<img src=http://cole-trapnell-lab.github.io/monocle-release/images/vignette/plot_diff_res_multi-1.png width="120%">
+&lt;img src=http://cole-trapnell-lab.github.io/monocle-release/images/vignette/plot_diff_res_multi-1.png width="120%"&gt;
 
 ---
 
@@ -108,7 +91,7 @@ Useful to assign cell-type to identify clusters as a secondary confirmation to M
 
 ## Seurat pics
 
-<img src=images/seurat_cluster.png width="120%">
+&lt;img src=images/seurat_cluster.png width="120%"&gt;
 
 
 ---
@@ -121,7 +104,7 @@ Useful to assign cell-type to identify clusters as a secondary confirmation to M
 * Another good QC metrics to use.
 ]
 .pull-right[
-<img src=images/sc_pipe_plot.png width="120%">
+&lt;img src=images/sc_pipe_plot.png width="120%"&gt;
 ]
 ---
 
@@ -133,5 +116,41 @@ Useful to assign cell-type to identify clusters as a secondary confirmation to M
 
 * De novo discovery of cell-types  
 
-* Beyond requirements for just 10X data - research focus.  
+* Beyond requirements for just 10X data - research focus.
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "pygments",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
 
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
