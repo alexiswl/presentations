@@ -1,0 +1,133 @@
+---
+
+title: "Single Cell Bioinformatics"
+
+subtitle: "A starter to bioinformatics in Single Cell"
+
+author: "Alexis Lucattini"
+
+date: "Thu 01 Mar 2018"
+
+output:
+
+  xaringan::moon_reader:
+
+    css: "libs/remark-css-0.0.1/SingleCellSummary.css"
+
+    lib_dir: libs
+
+    nature:
+
+      highlightStyle: pygments
+
+      highlightLines: true
+
+      countIncrementalSlides: false
+
+---
+
+# Single Cell Bioinformatics: Where to start
+
+The number of packages is forever growing.
+Some good guides to package sets are at:
+
+[scrna-tools.org](scrna-tools.org)
+[awesome single cell GitHub repo](https://github.com/seandavi/awesome-single-cell)
+
+Today we'll go through three.
+
++ Monocle
++ Seurat
++ ScPipe
++ SIMLR
+
+---
+
+# Monocle
+
+* Clustering and counting cells
+* Constructing single-cell trajtories
+* Differential expression between cell-types
+* Differential expression between time-points of a single cell type
+
+* Pseudotime tracking
+
+[Paper]
+[Repo]
+
+???
+
+Monocle was one of the first single-cell packages around.
+It has a bulk of citations and provides a comprehensive list of tools.
+
+Straight forward installation process, pulls UMI transcript count matrices out of cell ranger.
+Monocle will also normalise the data.
+
+Psuedotime - how far through a cell-fate has an individual cell gone through?
+Appropriate use-case would be tracking the cell-fates throughout a developmental process.
+
+---
+
+## Monocole plots
+
+Gene expression in pseudotime
+
+<image href cole-trapnell-lab.github.io/monocole-release/images/vignette/plot_diff_res_pt-1.png>
+
+---
+
+## Monocole plots
+
+Gene expression between cell-types
+< image href monocle-release/images/vignette/plot_diff_res_multi-1.png
+
+---
+
+# Seurat
+
+* Discovery and exploration of cell types along with cell-filtering
+
+* Generate QC metrics
+
+* Easily imports 10X data.
+
+* Can pass data into Monocle.
+
+???
+
+QC metrics include showing the number of UMI per cell barcode in violin plot.
+The percentage of mitochondrial DNA (an indicator of dead/dying cells)
+The number of genes per cell also in a violin plot.
+
+Useful to assign cell-type to identify clusters as a secondary confirmation to Monocle.
+
+---
+
+## Seurat pics
+
+<img src=http://www.science-practice.com/assets/york-minion/flowcell.jpg
+    width="120%">
+
+<image href = p
+
+
+--- 
+
+# ScPipe
+
+Testing for cell-outliers.
+
+Another good QC metrics to use.
+
+Pic of scPipe and biorxiv pic of plot list.
+
+---
+
+# SIMLR
+
+* Visualisation
+* Dimension reduction.
+* De novo discovery of cell-types
+* 
+
+
