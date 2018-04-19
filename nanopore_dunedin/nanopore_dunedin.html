@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Alignments, Quirks, and Assembly</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Alexis Lucattini" />
+    <link rel="stylesheet" href="libs\remark-css-0.0.1\nanopore_dunedin.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Alignments, Quirks, and Assembly
+## <br> Nanopore NZ
+### Alexis Lucattini
+### Wed 16th April 2018
+
+---
+
+# Nanopore Overview
+.pull-left[
+.baby-bear[
+## Pros:
+Ultra-long reads.
+Low-cost.
+Large Community support
+Quick library prep
+]
+]
+.pull-right[
+.baby-bear[
+## Cons:
+Low accuracy.
+Low yield.
+Systematic bias - homopolymers.
+Sample Specific.
+]
+]
+
+---
+
+# Alignment algorithms
+Initially limited, due to unique sequencing error parameters.
+
+.baby-bear[
+* LAST was the first best choice.
+  + Still very useful for metagenomics.&lt;br&gt;&lt;br&gt; 
+* Bwa mem with optimised parameters.  
+  + -ont2d option equivalent to "-k14 -W20 -r10 -A1 -B1 -O1 -E1 -L0"&lt;br&gt;&lt;br&gt; 
+* Minimap2 with the map-ont option. 
+  + Equivalent to "-k15"
+]
+
+---
+
+# Flags and Tags
+.small[
+Each alignment have set flags and tags. 
+This allows you to group reads/alignments based on certain conditions.  
+* Flags provide a boolean value for a given condition - True/False.
+  + *range: 0-255.*
+  + *Boolean combinations for eight attributes.*&lt;br&gt;&lt;br&gt; 
+* Tags can be optional and hold any type of information.
+  + *int, boolean, string*&lt;br&gt;&lt;br&gt; 
+* Many flags/tags are illumina-sequencing specific:
+  + *paired end*
+]
+---
+
+## Important tags to look at for nanopore sequencing
+.pull-left[
+.small[
+* NM tags
+  + The edit distance between alignment and sequence.
+* MD tag 
+  + Verbose version of the cg tag (CIGAR string) of an alignment
+  + Provides SNP/indel information
+  + Alignment only - no soft-clip/hard-clip information
+  + Insertions are not recorded. Info  [here](https://github.com/vsbuffalo/devnotes/wiki/The-MD-Tag-in-BAM-Files)
+]
+]
+
+.pull-right[
+
+&lt;table class="table" style="font-size: 20px; margin-left: auto; margin-right: auto;"&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;font-family: monospace;"&gt; REF &lt;/td&gt;
+   &lt;td style="text-align:left;font-family: monospace;"&gt; TAA-GCAAGGTCG &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;font-family: monospace;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;font-family: monospace;"&gt; ||||||||||||| &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;font-family: monospace;"&gt; READ &lt;/td&gt;
+   &lt;td style="text-align:left;font-family: monospace;"&gt; CTTGGCA--GTCG &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+.small[
+* A CIGAR string
+  + `3M1I3M2D2M4`  
+* An MD string equivalent
+  + `2MA3^AG4`  
+* A CS tag (See next page)
+  + `:2*AT+G:3-AG:4`
+]
+]
+
+---
+
+# The CS tag and MD tag
+.pull-left[
+.baby-bear[
+* CS tag - verbose version of MD tag
+  + Easier for parsing.
+  + Relatively new.
+  + MD tag still required for some parsers.
+    + Pipe through `samtools calmd` prior to sorting.
+]
+]
+.pull-right[
+.baby-bear[
+* CS tag example:
+  + `:6-ata:10+gtc:4*at:3`
+  + `:[0-9]+ is an identical block`
+  + '-[ACTG]+ is a deletion`
+  + '+[ACTG]+ is an insersion
+  + '*XY' is a substitution with base X subsituted for base y.
+]
+]
+---
+
+# Alignments in Minimap2
+.pull-left[
+.baby-bear[
+* .large[Supplementary alignments]:
+  + Definition: A segment of the read which is (mostly) non overlapping the primary alignment that aligns to an alternative position in the genome.
+  + Cases:
+    * Structural variation.
+    * Chimeric reads.&lt;br&gt;&lt;br&gt;
+]
+]
+.pull-right[
+.baby-bear[
+* .large[Secondary alignments]:
+  + Definition: A segment of the read which provides an alternative alignment to the primary.
+  + Cases:
+    * Repeat regions of the genome.
+    * Primary alignment may still span both flanks.&lt;br&gt;&lt;br&gt;
+]
+]
+
+---
+
+# Some alignment quirks.
+Using pysam, I found a high ratio of discordant to concordant reads.
+These supplementary alignments also overlap the primary read.
+
+.center[&lt;img src=./images/primary_vs_supps.png width=40%&gt;]
+
+???
+
+# Methylation
+
+What is methylation, current approach to methlyation.
+
+Nanopolish detect methylation.
+Tombo - I look forward to trying this.
+
+
+# Methylation with nanopore sequencing
+
+Benefits, pros cons.
+
+---
+
+# Two main common assembler types:
+
+* de-Bruijn graphs
+
+* OLC - Overlap-layout-concensus
+
+
+
+???
+
+http://www.cs.jhu.edu/~langmea/resources/lecture_notes/assembly_dbg.pdf
+http://www.cs.jhu.edu/~langmea/resources/lecture_notes/assembly_olc.pdf
+http://bioinformatics.org.au/ws14/wp-content/uploads/ws14/sites/5/2014/07/Torsten-Seemann_presentation.pdf
+
+---
+
+# Assembly lingo
+.small[
+* k-mer:
+  + A sequence of length k.&lt;br&gt;&lt;br&gt;
+* Node:
+  + A short sequence or k-mer within the assembly that can be linked to other sequences.&lt;br&gt;&lt;br&gt;
+* Edges:
+  + A link between two sequences that have evidence of overlap.&lt;br&gt;&lt;br&gt;
+* Graphs:
+  + A visual representation of the sequence using edges and nodes.&lt;br&gt;&lt;br&gt;
+]
+
+---
+
+# Assembly lingo 2
+
+.pull-left[
+* Contig:
+  .small[
+  + An unambiguous* contiguous assembled sequence of the genome.
+  ]&lt;br&gt;&lt;br&gt;
+* Scaffold:
+  .small[
+  + A collection of contigs with known orientation.
+  ]
+]
+.pull-right[
+.center[
+        &lt;img src="images/scaffolds.png" width="100%"&gt;
+]
+.tiny[Image credit [Torsten Seeman](http://bioinformatics.org.au/ws14/wp-content/uploads/ws14/sites/5/2014/07/Torsten-Seemann_presentation.pdf)]
+]
+
+
+---
+
+# Expectations vs Realities
+.center[
+&lt;img src="images/lots_of_edges.png" width="55%"&gt;
+]
+
+---
+
+# Assembly issues
+
+.pull-left[
+*Difficult*:
+.small[
+* Parallelisation is non-trivial.
+* Non-linear complexity.
+  + Each read is compared to each other read for overlaps.
+* non-haploid genomes are troublesome.
+]
+]
+.pull-right[
+*Impossible where*:
+.small[
+* Repeat-length &gt;
+  read-length
+
+]
+]
+.small[
+*The following slides have been inspired by Ben Langmead's lecture series, which you can find [here](http://www.langmead-lab.org/teaching-materials/)*
+]
+
+---
+
+### Assembly Approach 1: De-Bruijn graphs
+
+.pull-left[
+.small[
+* Pronounced 'D-Brown'
+  + .tiny[source unknown, and irrelevant fact]&lt;br&gt;&lt;br&gt;
+* k-mer based path to infer assembly.&lt;br&gt;&lt;br&gt;
+* Genome:
+  + `a_long_long_long_time`&lt;br&gt;&lt;br&gt;
+* `k=5`
+]
+]
+.pull-right[
+.center[&lt;img src="images/de_bruijn_graphs.png" width="35%"&gt;]
+]
+
+---
+
+### Assembly Approach 1: De-Bruijn graphs
+
+.pull-left[
+.baby-bear[
+**Pros**  
+Fast! - complexities:
+  + Space is `O(N)`
+  + Build time is `O(N)`
+]
+]
+.pull-right[
+**Cons**  
+.baby-bear[
+* Can't resolve repeats well.
+  + Bound by k-mer size. Always less than read-length.
+* Difficulty with read-errors.
+  + Exacerbated by PCR-amplification bias.
+]]
+
+---
+
+## Assembly Approach 2: OLC.
+
+.pull-left[
+.baby-bear[
+1. Build an overlap graph:
+  + Locally align prefix of read X to suffix of read Y.
+2. Convert overlap stretches into contigs.
+3. Run a pileup concensus on the reads mapping to each contig.
+]
+]
+.pull-right[
+.center[&lt;img src="images/prefix_suffix.png", width="60%"&gt;]
+]
+
+---
+
+## Assembly Approach 2: OLC.
+
+.pull-left[
+**Pros**
+1. Less sensitive to sequencing errors.
+2. Handles larger repeats
+3. Low specificity can bubbles.
+]
+.pull-right[
+**Cons**
+1. Overlapping reads is slow.
+  + Non-linear time complexity
+  + `O(N^2); N=Num reads.`
+2. Low specificity can cause graph errors.
+]
+
+---
+
+# Incomplete assemblies.
+
+.pull-left[
+## Useful for:
+* Gene quantification.
+* SNP detection.
+]
+
+.pull-right[
+## Work needed:
+* Structural annotation.
+* Structural translocations.
+* Copy number variation.
+]
+
+---
+
+## Assembly with long-read sequencing.
+
+Long read platforms: .tiny[That I'm familiar with] 
+ + 10X Chromium.
+ 
+ + PacBio.
+ 
+ + Nanopore.
+
+---
+
+## PacBio Circular Consensus sequencing.
+
+.pull-left[
+.baby-bear[
+* Increases accuracy.  
+* Minimal sequencing bias.  
+* Insert length != Subread length.  
+* Gold standard for de novo assemblies.
+  + But expensive cost-per-base.
+]
+]
+
+.pull-right[
+.center[&lt;img src="https://experiment-uploads.s3.amazonaws.com/ro6ddVD2RPq0wWwCfytl_3Part_Reads_Def.png" width="100%"&gt;]
+]
+---
+
+# 10X Chromium.
+.pull-left[
+.baby-bear[
+* Illumina level accuracy&lt;br&gt;&lt;br&gt;
+* Supernova optimised for human genomes&lt;br&gt;&lt;br&gt;
+* Shortfall on highly repetitive genome sequences.&lt;br&gt;&lt;br&gt;
+* Some regions - long stetches of short tandem  repeats still unsolvable.&lt;br&gt;&lt;br&gt;
+]
+]
+.pull-right[
+.center[&lt;img src="./images/linked_reads.png" width="90%"&gt;]
+]
+---
+
+## Nanopore sequencing .small[for large genomes.]
+.pull-left[
+## Pros
+.baby-bear[
+* Low capital cost.
+* Ultra-long reads can scaffold Illumina sequences.
+]
+]
+.pull-right[
+## Cons
+.baby-bear[
+* Low accuracy requires lower alignment stringency =&gt; greater cpu-hours.
+* Systematic bias provides issues with genomic assemblies.
+* Best with hybrid approach.
+]
+]
+
+---
+
+# Real-world np assemblers
+
+## Miniasm
+
+Fast and dirty - OLC.
+Little concensus done.
+
+## Canu
+
+Forked from Celera assembler - OLC.
+CPU heavy - Human Genome ~ 60'000 cpu hours!
+
+---
+
+# A hybrid approach!
+
+Unicycler:
+.baby-bear[
+* illumina-only 
+  + **SPAdes** + custom overlap trimming &amp; bridging
+
+* de-novo 
+  + **miniasm** + **racon** polishing
+
+* hybrid 
+  + **miniasm** + **racon** on anchor contigs + bridging.
+]
+
+---
+
+# The PromethION!
+
+Kit-9, sample sensitive, great N50!
+
+.pull-left[
+&lt;img src=./images/prom.yield.png width=80%&gt;
+]
+.pull-right[
+&lt;img src=./images/prom.hist.png width=80%&gt;
+]
+
+---
+
+class: genomics-innovation-hub, gih-slide-number
+
+# Hub Goals
+
+* Building innovation ecosystems.
+* Stepping up to the innovation challenge.
+* Providing access to state-of-the-art technologies
+* Managing cost efficiency
+
+.pull-right[
+Contact: &lt;a href="mailto:azadeh.seidi@agrf.org.au"&gt;Azadeh Saedi&lt;/a&gt;
+.kinda-small[Website: &lt;a href="https://genomicsinnovationhub.org.au"&gt;GenomicsInnovationHub.org.au&lt;/a&gt;]]
+
+
+???
+
+* Building innovation ecosystems: 
+    + through common research, collaboration, education and technology development.
+* Stepping up to the innovation challenge: 
+    + bringing resources together to diffuse cutting-edge genomic technologies.
+* Providing access to state-of-the-art technologies: 
+    + access to Australia's first 10X Genomics Chromium system, as well as early access to cutting-edge technologies such as the Oxford Nanopore Technologies PromethION.
+* Managing cost efficiency: 
+    + open access to a portfolio of cutting-edge technologies and competencies.
+
+---
+
+# Thank yous.
+.pull-left[
+.baby-bear[
+* R&amp;D:
+    + Azadeh Saedi
+    + Ken McGrath
+    + Kirby Siemering
+    + Lavinia Gordon
+* Lab Ops:
+    + Matthew Tinning
+* IT:
+    + Chris Hunt
+    + Douglas Morrison
+    + Gismon Thomas
+* PR:
+    + Desley Pitcher
+]
+]
+.pull-right[
+.baby-bear[
+* WEHI
+    + Matthew Ritchie
+    + Quentin Gouil
+    + Scott Gigante
+    + Chris Woodruff
+]
+]
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "pygments",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
