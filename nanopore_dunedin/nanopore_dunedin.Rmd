@@ -170,7 +170,7 @@ Benefits, pros cons.
 
 * de-Bruijn graphs
 
-* OLC - Overlap-layout-concensus
+* OLC - Overlap-layout-consensus
 
 
 
@@ -296,7 +296,7 @@ Fast! - complexities:
 1. Build an overlap graph:
   + Locally align prefix of read X to suffix of read Y.
 2. Convert overlap stretches into contigs.
-3. Run a pileup concensus on the reads mapping to each contig.
+3. Run a pileup consensus on the reads mapping to each contig.
 ]
 ]
 .pull-right[
@@ -406,7 +406,7 @@ Long read platforms: .tiny[That I'm familiar with]
 ## Miniasm
 
 Fast and dirty - OLC.
-Little concensus done.
+Little consensus done.
 
 ## Canu
 
