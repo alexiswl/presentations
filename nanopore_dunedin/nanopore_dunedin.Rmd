@@ -82,7 +82,9 @@ This allows you to group reads/alignments based on certain conditions.
 ```{r, echo=FALSE, results='asis'}
 library(magrittr)
 knitr::kable(data.frame(c("REF ","    ", "READ"),
-                        c("TAA-GCAAGGTCG", "|||||||||||||", "CTTGGCA--GTCG")
+                        c("TAA-GCAAGGTCG", 
+                          "|||||||||||||", 
+                          "TATGGCA--GTCG")
                         ),
              col.names = NULL, format="html") %>%
   kableExtra::kable_styling(full_width = T, font_size=20) %>%
@@ -148,21 +150,7 @@ knitr::kable(data.frame(c("REF ","    ", "READ"),
 Using pysam, I found a high ratio of discordant to concordant reads.
 These supplementary alignments also overlap the primary read.
 
-.center[<img src=./images/primary_vs_supps.png width=40%>]
-
-???
-
-# Methylation
-
-What is methylation, current approach to methlyation.
-
-Nanopolish detect methylation.
-Tombo - I look forward to trying this.
-
-
-# Methylation with nanopore sequencing
-
-Benefits, pros cons.
+.center[<img src=./images/primary_vs_supps.png width=38%>]
 
 ---
 
@@ -371,10 +359,9 @@ Long read platforms: .tiny[That I'm familiar with]
 # 10X Chromium.
 .pull-left[
 .baby-bear[
-* Illumina level accuracy<br><br>
-* Supernova optimised for human genomes<br><br>
-* Shortfall on highly repetitive genome sequences.<br><br>
-* Some regions - long stetches of short tandem  repeats still unsolvable.<br><br>
+* Long-reads + Illumina level accuracy!<br><br>
+* Bioinformatics rapidly improving<br><br>
+* Some regions - long stetches of short tandem repeats still unsolvable.<br><br>
 ]
 ]
 .pull-right[
@@ -441,6 +428,36 @@ Kit-9, sample sensitive, great N50!
 .pull-right[
 <img src=./images/prom.hist.png width=80%>
 ]
+
+---
+
+# Our NGS Pool-Party!
+
+.pull-left[
+.small[
+**Whole Genome Sequencing**  
+* minimum 1 sample submission
+  + .baby-bear[100 Gb/sample or 50 Gb/sample]
+* TruSeq DNA Nano or TruSeq DNA PCR-free sample prep
+
+**Whole Exome Sequencing**  
+* minimum 6 samples
+* SureSelect XT2 Human All Exon v6 .baby-bear[(58Mb)]
+* 6 Gb per sample .baby-bear[(100X raw cov.)]
+]
+]
+
+.pull-right[
+.small[
+**RNA-Seq**  
+* min 24 sample submission, in multiples of 24
+* 100bp Single Read
+* 20M reads per sample
+* raw data (FASTQ)
+* restrictions: human and mouse only
+]
+]
+
 
 ---
 
