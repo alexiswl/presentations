@@ -1,4 +1,4 @@
-# A list of presentations I have done (not exhausted)
+# A list of presentations I have done (not an exhaustive list)
 
 2018
 1. [Getting Started with a MinION - Feb 09 2018 - VCCC](Getting_Started_with_a_MinION/Getting_Started_with_a_MinION.html)
