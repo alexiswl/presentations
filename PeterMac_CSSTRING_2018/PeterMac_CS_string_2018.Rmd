@@ -1,0 +1,247 @@
+---
+title: "Nanopore and Minimap2 things"
+subtitle: "<br> PeterMac Floor 12"
+author: "Alexis Lucattini"
+date: "Thu 30th May 2018"
+output:
+  xaringan::moon_reader:
+    css: "libs/remark-css-0.0.1/nanopore_dunedin.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: pygments
+      highlightLines: true
+      countIncrementalSlides: false
+    self-contained: no
+
+---
+# Nanopore Overview
+.pull-left[
+.baby-bear[
+## Pros:
+Ultra-long reads.
+Low-cost.
+Large Community support
+Quick library prep
+]
+]
+.pull-right[
+.baby-bear[
+## Cons:
+Low accuracy.
+Low yield.
+Systematic bias - homopolymers.
+Sample Specific.
+]
+]
+
+---
+
+# The PromethION!
+
+Kit-9, sample sensitive, great N50!
+
+.pull-left[
+<img src=./images/prom.yield.png width=90%>
+]
+.pull-right[
+<img src=./images/prom.hist.png width=90%>
+]
+
+---
+
+# Alignment algorithms
+Initially limited, due to unique sequencing error parameters.
+
+.baby-bear[
+* LAST was the first best choice.
+  + Still very useful for metagenomics.<br><br> 
+* Bwa mem with optimised parameters.  
+  + -ont2d option equivalent to "-k14 -W20 -r10 -A1 -B1 -O1 -E1 -L0"<br><br> 
+* Minimap2 with the map-ont option. 
+  + Equivalent to "-k15"
+]
+
+---
+
+# Flags and Tags
+.small[
+Each alignment have set flags and tags. 
+This allows you to group reads/alignments based on certain conditions.  
+* Flags provide a boolean value for a given condition - True/False.
+  + *range: 0-255.*
+  + *Boolean combinations for eight attributes.*<br><br> 
+* Tags can be optional and hold any type of information.
+  + *int, boolean, string*<br><br> 
+* Many flags/tags are illumina-sequencing specific:
+  + *paired end*
+]
+---
+
+## Important tags to look for in nanopore sequencing
+.pull-left[
+.small[
+* NM tags
+  + The edit distance between read and sequence.
+  + 1 - NM/AlignmentLength ~= Accuracy
+* MD tag 
+  + Verbose version of the cg tag (CIGAR string) of an alignment
+  + Provides SNP/indel information
+  + No clip info
+  + Insertions are not recorded. Info  [here](https://github.com/vsbuffalo/devnotes/wiki/The-MD-Tag-in-BAM-Files)
+]
+]
+
+.pull-right[
+
+```{r, echo=FALSE, results='asis'}
+library(magrittr)
+knitr::kable(data.frame(c("REF ","    ", "READ"),
+                        c("TAA-GCAAGGTCG", 
+                          "|||||||||||||", 
+                          "TATGGCA--GTCG")
+                        ),
+             col.names = NULL, format="html") %>%
+  kableExtra::kable_styling(full_width = T, font_size=20) %>%
+  kableExtra::column_spec(1:2, monospace=TRUE) 
+```
+.small[
+* A CIGAR string
+  + `3M1I3M2D2M4`  
+* An MD string equivalent
+  + `2MA3^AG4`  
+* A CS tag (See next page)
+  + `:2*AT+G:3-AG:4`
+]
+]
+
+---
+
+# The CS tag and MD tag
+.pull-left[
+.baby-bear[
+**CS tag**
+* Verbose version of MD tag
+* Easier for parsing.
+* Relatively new.
+* MD tag still required for some parsers.
+  + Pipe through  `samtools calmd` prior to sorting.
+
+CS tag example:  
+`:6-ata:10+gt:4*at:3`
+]
+]
+.pull-right[
+.baby-bear[
+Key:
+* `:[0-9]+ is an identical block`
+* '-[ACTG]+ is a deletion`
+* '+[ACTG]+ is an insersion
+* '*XY' is a substitution with base X subsituted for base y.
+]
+]
+
+---
+
+# The --cs-long option
+
+The `--cs-long` parameter provides a reference free solution to alignment queries.
+
+.pull-left[
+
+```{r, echo=FALSE, results='asis'}
+library(magrittr)
+knitr::kable(data.frame(c("REF ","    ", "READ"),
+                        c("TAA-GCAAGGTCG", 
+                          "|||||||||||||", 
+                          "TATGGCA--GTCG")
+                        ),
+             col.names = NULL, format="html") %>%
+  kableExtra::kable_styling(full_width = T, font_size=20) %>%
+  kableExtra::column_spec(1:2, monospace=TRUE) 
+```
+.small[
+CS long tag example:
+  + `=TA*AT+G=GCA-AG=GTCG`
+]
+]
+.pull-right[
+.baby-bear[
+**Key**
++ `=[ATCG]+` is a set of matches
++ `-[ACTG]+` is a deletion
++ `+[ACTG]+` is an insertion
++ *XY' is a substitution with X-ref for Y-read.
+]
+]
+
+---
+
+# For the love of regex
+
+.large[`/(:[0-9]+|\*[a-z][a-z]|[=\+\-][A-Za-z]+)+/`]
+
+---
+
+# Alignments in Minimap2
+.pull-left[
+.baby-bear[
+**Supplementary alignments**:
+Definition: 
+* A segment of the read which is (mostly) non-overlapping the primary alignment that maps to an alternative position in the genome.
+
+Cases:
+* Structural variation.
+]
+]
+.pull-right[
+.baby-bear[
+**Secondary alignments**:
+Definition: 
+* A segment of the read which provides an alternative alignment to the primary.
+
+Cases:
+* Repeat regions of the genome.
+]
+]
+
+---
+
+# Pysam, pandas and puerility
+
+.baby-bear[
+1. Pysam to pull out the cs string and other metadata from an alignment segment.
+2. Convert the alignment segment to a pandas dataframe with the following columns:
++ ReadNuc, RefNuc  `# Nucleotide`
++ ReadPos, RefPos  `# Position in read/ref`
++ ReadStartContig, RefStartContig  `# Start of indel/match`
++ ReadEndContig, RefEndContig  `# End of indel/match`
+]
+---
+
+# Thank yous.
+.pull-left[
+.baby-bear[
+* R&D:
+    + Azadeh Saedi
+    + Ken McGrath
+    + Kirby Siemering
+    + Lavinia Gordon
+* Lab Ops:
+    + Matthew Tinning
+* IT:
+    + Chris Hunt
+    + Douglas Morrison
+    + Gismon Thomas
+* PR:
+    + Desley Pitcher
+]
+]
+.pull-right[
+.baby-bear[
+* WEHI
+    + Matthew Ritchie
+    + Quentin Gouil
+    + Scott Gigante
+    + Chris Woodruff
+]
+]
