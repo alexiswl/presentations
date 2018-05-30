@@ -2,5 +2,8 @@
 
 2018
 1. [Getting Started with a MinION - Feb 09 2018 - VCCC](Getting_Started_with_a_MinION/Getting_Started_with_a_MinION.html)
+2. [Alignments, Quircks and Assemblies on Nanopore Sequencing - April 18th 2018 - Dunedin NZ](nanopore_dunedin/nanopore_dunedin.html)
+3. [Minimap2 and the cs string - May 31st 2018 - VCCC](PeterMac_CSSTRING_2018/PeterMac_CS_string_2018.html)
 
-If you are reading this and only see one presentation. It is because I haven't uploaded the others.
+Tutorials (that have never officially been presented)
+1. [Vagrant Boxes for running and sharing VMs](Creating_A_Vagrant_Box/Creating_A_Vagrant_Box.html)
