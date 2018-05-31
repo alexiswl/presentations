@@ -13,7 +13,7 @@ class: center, middle, inverse, title-slide
 # Nanopore and Minimap2 things
 ## <br> PeterMac Floor 12
 ### Alexis Lucattini
-### Thu 30th May 2018
+### Thu 31st May 2018
 
 ---
 
@@ -229,6 +229,31 @@ Cases:
 + ReadStartContig, RefStartContig  `# Start of indel/match`
 + ReadEndContig, RefEndContig  `# End of indel/match`
 ]
+
+---
+
+# The simple things:
+
+```
+def extractEditMetricsFromBam(bam):
+    '''
+    loop over a bam file and get the edit distance to the reference genome
+    stored in the NM tag
+    scale by aligned read length
+    '''
+    samfile = pysam.AlignmentFile(bam, "rb")
+    return [(read.get_tag("NM"), read.query_alignment_length) 
+            for read in samfile.fetch()
+            if read.get_tag("tp") == "P"]
+
+```
+---
+
+# Slightly more complex things
+
+[My GitHub gist](https://gist.github.com/alexiswl/b52884c82e7afd28aec7bcda20b6f5fa
+)
+
 ---
 
 # Thank yous.
