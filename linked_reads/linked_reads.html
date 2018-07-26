@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Longranger, Lariat and Loupe</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Alexis Lucattini" />
+    <link rel="stylesheet" href="libs\remark-css-0.0.1\linked_reads.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Longranger, Lariat and Loupe
+## The ins and outs of the 10X pipeline
+### Alexis Lucattini
+### Thu 19 Jul 2018
+
+---
+
+
+### Another visual introduction to linked-reads:
+
+.small[Because you can never watch this video too many times]
+.center[&lt;a href="https://10xgenomics.wistia.com/medias/2r0nal3n3j"&gt;&lt;img src=./images/intro_video_thumbnail.png width=68%&gt;]
+
+???
+
+Add linked reads video here.
+https://10xgenomics.wistia.com/medias/2r0nal3n3j
+
+70s in.
+
+---
+
+# The Longranger pipeline.
+
+.center[&lt;img src=./images/10X_DIAGRAM.png width=50%&gt;]
+
+???
+
+An important note is that the bcl2fastq stage is separate from the standard illumina bcl2fastq.
+The longranger mkfastq is essentially a wrapper aroudn bcl2fastq with a couple of tinkerings.
+
+---
+
+# 10x mkfastq
+.pull-left[
+.baby-bear[
+* Wrapper of bcl2fastq
+* Input
+  + Requires input and output directories
+  + A samplesheet
+  + A base-mask parameter.
+* Output
+  + Fastq files split by 10X kit ID .tiny[(SI-GA-01)]
+    + Barcode/Index QC Values.
+    + GEM estimates
+]]
+.pull-right[
+*  `*_L1.fastq.gz` contains the i7 index
+*  `*_R1.fastq.gz` contains the fastq information. &lt;br&gt;
+&lt;img src=./images/index_orientation.png width=150%&gt;
+]
+
+???
+
+---
+
+# Longranger basic
+.pull-left[
+Input: Fastq
+Approx run time: A few hours.
+Output:
+*  unaligned Bam or fastq output.
+*  summary.csv file
+]
+
+.pull-right[
+BAM TAGS .small[useful]
+*  BX - corrected barcode
+*  QX - barcode quality
+
+.tiny[`samtools view $bamfile`]
+.tiny[`&lt;header&gt; &lt;flags&gt; &lt;seq&gt; &lt;seqQ&gt; BX:Z:AAACACCAGGGTTCGA`]
+]
+
+???
+
+---
+
+# Longranger align
+BWA + 10X lariat aligner
+.pull-left[
+Input: Fastq.&lt;br&gt;
+Approx run rime: A few hours.&lt;br&gt;
+Output: 
++ Bam/alignment qc stats/
+
+]
+.pull-right[
+Output bam tags:
+* .small[]
+* .small[More on the next page.]
+]
+
+???
+
+Takes about a day, what bam tag outputs are provided.
+First pass alignment with BWA.
+Second pass with the 10X lariat aligner.
+---
+
+# Lariat Aligner
+
+Extra benefits,
+Uses primary and secondary alignments alongside information of the gem tag to determine the accuracy position.
+
+Lariat based bam tags.
+
+???
+
+todo: discuss bam tags.
+
+---
+
+# Longranger wgs
+
+Input: Fastq.
+Approx run time: Three days.
+Structural variation, 
+Align to the reference genome.
+Call SNPs and structural variation calls.
+
+todo:
+provide cpu, mem and runtime values.
+
+---
+
+# The Loupe file
+~ 5Gb file.
+
+Contains alignment information across the entire genome.
+Similar to an IGV browser.
+
+???
+
+todo: Add screenshot of the loupe file.
+
+---
+
+# Viewing your loupe-file
+## A live demonstration
+
+
+???
+
+Homozygous deletion:
+chr3:129,663,385-129,863,385
+
+Heterozygous deletion:
+chr1:152,355,549-152,755,549
+check the linked reads tab as well for this one.
+
+Duplication:
+chr6:165,000-495,000
+
+Het DUP:
+
+
+Homo INV:
+32: 7 54,287,991, 54376,000
+
+
+---
+
+# List of resources used today
+
+.pull-left[
+Miscellaneous:
+*  [ssh-bind ports](https://help.ubuntu.com/community/SSH/OpenSSH/PortForwarding)
+*  [screen]
+*  [slurm]
+]
+
+.pull-right[
+10X video
+10X BAM Tags
+Loupe downloader
+NA12878 10X download
+]
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "pygments",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
