@@ -59,7 +59,7 @@ The longranger mkfastq is essentially a wrapper aroudn bcl2fastq with a couple o
 .pull-right[
 *  `*_L1.fastq.gz` contains the i7 index
 *  `*_R1.fastq.gz` contains the fastq information. &lt;br&gt;
-&lt;img src=./images/index_orientation.png width=150%&gt;
+&lt;img src=./images/index_orientation.png width=130%&gt;
 ]
 
 ???
@@ -80,7 +80,7 @@ BAM TAGS .small[useful]
 *  BX - corrected barcode
 *  QX - barcode quality
 
-.tiny[`samtools view $bamfile`]
+.tiny[`samtools view $bamfile`]  
 .tiny[`&lt;header&gt; &lt;flags&gt; &lt;seq&gt; &lt;seqQ&gt; BX:Z:AAACACCAGGGTTCGA`]
 ]
 
@@ -89,18 +89,23 @@ BAM TAGS .small[useful]
 ---
 
 # Longranger align
-BWA + 10X lariat aligner
+BWA + 10X Lariat aligner
 .pull-left[
-Input: Fastq.&lt;br&gt;
-Approx run rime: A few hours.&lt;br&gt;
+Input: 
+ + Fastq.&lt;br&gt;
+~Run time: 
+ + 24 hours.&lt;br&gt;
 Output: 
-+ Bam/alignment qc stats/
-
+ + Aligned BAM
+ + Alignment QC stats
 ]
 .pull-right[
 Output bam tags:
-* .small[]
-* .small[More on the next page.]
+.baby-bear[
+* AS - Primary Alignment Score
+* XS - Secondary Alignment Score
+* TBC.
+]
 ]
 
 ???
@@ -112,27 +117,31 @@ Second pass with the 10X lariat aligner.
 
 # Lariat Aligner
 
-Extra benefits,
-Uses primary and secondary alignments alongside information of the gem tag to determine the accuracy position.
-
-Lariat based bam tags.
+Extra benefits
+Uses primary and secondary alignments alongside information of the GEM tag to:
+1. Boost confidence in the alignment score (AM)
+2. Use alignments with the same molecular tag to align to  repeat regions (XS)
+3. Overcome tandem duplications using GEM tag of secondary alignments (XT)
 
 ???
 
-todo: discuss bam tags.
 
 ---
 
 # Longranger wgs
+Obtain SNP calling .small[GATK], phasing and SV information
 
-Input: Fastq.
-Approx run time: Three days.
-Structural variation, 
-Align to the reference genome.
-Call SNPs and structural variation calls.
+Input: 
+ + Fastq.
+~ Run time: 
+ + Three days .small[w. 250GB RAM and 16 cores]
+Output:
+ + List of structural variants in bed format.
+ + BAM files with Phasing tags.
+ + .loupe file.
 
-todo:
-provide cpu, mem and runtime values.
+???
+
 
 ---
 
@@ -142,15 +151,24 @@ provide cpu, mem and runtime values.
 Contains alignment information across the entire genome.
 Similar to an IGV browser.
 
+&lt;img src=./images/full_sv_view.png width=60%&gt;
+
 ???
 
-todo: Add screenshot of the loupe file.
 
 ---
 
 # Viewing your loupe-file
-## A live demonstration
 
+Live Demonstration on a HPC.
+
+Steps:
+1. Allocate a node (be greedy)
+2. Copy all your .loupe files to a local space on the HPC node.
+3. Start loupe.
+4. ssh in (with binding) into that node.
+
+All code in the comments
 
 ???
 
@@ -166,10 +184,16 @@ chr6:165,000-495,000
 
 Het DUP:
 
-
 Homo INV:
 32: 7 54,287,991, 54376,000
 
+`ssh username@headnode`
+`screen`
+`srun --mem=100G --time=2-0 --pty bash`
+`export LOUPE_SERVER=/path/to/loupe files`
+`start-loupe.sh`
+
+`ssh -L3000:127.0.0.1:3000 username@workernode`
 
 ---
 
@@ -188,6 +212,14 @@ Miscellaneous:
 Loupe downloader
 NA12878 10X download
 ]
+
+---
+
+# Thank yous
+
+???
+
+todo thank yous.
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({

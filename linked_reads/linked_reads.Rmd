@@ -57,7 +57,7 @@ The longranger mkfastq is essentially a wrapper aroudn bcl2fastq with a couple o
 .pull-right[
 *  `*_L1.fastq.gz` contains the i7 index
 *  `*_R1.fastq.gz` contains the fastq information. <br>
-<img src=./images/index_orientation.png width=150%>
+<img src=./images/index_orientation.png width=130%>
 ]
 
 ???
@@ -78,7 +78,7 @@ BAM TAGS .small[useful]
 *  BX - corrected barcode
 *  QX - barcode quality
 
-.tiny[`samtools view $bamfile`]
+.tiny[`samtools view $bamfile`]  
 .tiny[`<header> <flags> <seq> <seqQ> BX:Z:AAACACCAGGGTTCGA`]
 ]
 
@@ -89,15 +89,17 @@ BAM TAGS .small[useful]
 # Longranger align
 BWA + 10X Lariat aligner
 .pull-left[
-Input: Fastq.<br>
-~Run time: 24 hours.<br>
+Input: 
+ + Fastq.<br>
+~Run time: 
+ + 24 hours.<br>
 Output: 
-+ Bam/alignment qc stats/
-
+ + Aligned BAM
+ + Alignment QC stats
 ]
 .pull-right[
 Output bam tags:
-.small[
+.baby-bear[
 * AS - Primary Alignment Score
 * XS - Secondary Alignment Score
 * TBC.
@@ -125,15 +127,16 @@ Uses primary and secondary alignments alongside information of the GEM tag to:
 ---
 
 # Longranger wgs
-Obtain SNP calling, phasing and SV information
+Obtain SNP calling .small[GATK], phasing and SV information
 
-Input: Fastq.
-~ Run time: Three days .small[w. 250GB RAM and 16 cores]
-
+Input: 
+ + Fastq.
+~ Run time: 
+ + Three days .small[w. 250GB RAM and 16 cores]
 Output:
-List of structural variants in bed format.
-BAM files with Phasing tags.
-.loupe file.
+ + List of structural variants in bed format.
+ + BAM files with Phasing tags.
+ + .loupe file.
 
 ???
 
@@ -146,15 +149,24 @@ BAM files with Phasing tags.
 Contains alignment information across the entire genome.
 Similar to an IGV browser.
 
+<img src=./images/full_sv_view.png width=60%>
+
 ???
 
-todo: Add screenshot of the loupe file.
 
 ---
 
 # Viewing your loupe-file
-## A live demonstration
 
+Live Demonstration on a HPC.
+
+Steps:
+1. Allocate a node (be greedy)
+2. Copy all your .loupe files to a local space on the HPC node.
+3. Start loupe.
+4. ssh in (with binding) into that node.
+
+All code in the comments
 
 ???
 
@@ -170,10 +182,16 @@ chr6:165,000-495,000
 
 Het DUP:
 
-
 Homo INV:
 32: 7 54,287,991, 54376,000
 
+`ssh username@headnode`
+`screen`
+`srun --mem=100G --time=2-0 --pty bash`
+`export LOUPE_SERVER=/path/to/loupe files`
+`start-loupe.sh`
+
+`ssh -L3000:127.0.0.1:3000 username@workernode`
 
 ---
 
@@ -193,3 +211,10 @@ Loupe downloader
 NA12878 10X download
 ]
 
+---
+
+# Thank yous
+
+???
+
+todo thank yous.
