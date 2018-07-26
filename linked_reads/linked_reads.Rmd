@@ -2,7 +2,7 @@
 title: "Longranger, Lariat and Loupe"
 subtitle: "The ins and outs of the 10X pipeline"
 author: "Alexis Lucattini"
-date: "Thu 19 Jul 2018"
+date: "Fri 27 Jul 2018"
 
 output:
   xaringan::moon_reader:
@@ -23,6 +23,10 @@ output:
 
 ???
 
+Things to note:
+
+The GEMs, 14 bp barcodes, and molecular tags.
+
 Add linked reads video here.
 https://10xgenomics.wistia.com/medias/2r0nal3n3j
 
@@ -39,9 +43,12 @@ https://10xgenomics.wistia.com/medias/2r0nal3n3j
 An important note is that the bcl2fastq stage is separate from the standard illumina bcl2fastq.
 The longranger mkfastq is essentially a wrapper aroudn bcl2fastq with a couple of tinkerings.
 
+You then have the option of 'basic, align or wgs from fastq', each with cumulative benefits.
+You may wish to use these two on the left for running alternative analysis callers not menitoned today. 
+
 ---
 
-# 10x mkfastq
+## 10x mkfastq
 .pull-left[
 .baby-bear[
 * Wrapper of bcl2fastq
@@ -56,30 +63,45 @@ The longranger mkfastq is essentially a wrapper aroudn bcl2fastq with a couple o
 ]]
 .pull-right[
 *  `*_L1.fastq.gz` contains the i7 index
-*  `*_R1.fastq.gz` contains the fastq information. <br>
+*  `*_R1.fastq.gz` contains the fastq information. <br><br>
 <img src=./images/index_orientation.png width=130%>
 ]
 
 ???
 
+
+
+---
+
+# BAM Files
+```
+samtools view align/MG10_output/outs/possorted_bam.bam | head -n1
+```  
+.small[
+```
+A00121:44:H5CGNDSXX:3:1636:0:1306618    177     chr1    9990    
+20      13S9M1D42M6I24M6I18M6I26M    ATCTCTATCATTATGTCTGTCCATAACCCTAACCCTAACCCTAACCCTAACCCTAACCCTAACCC 
+F,F,:,F,,F,,F:,:,F,FFF,FFFFFF:FFFFFFF::FFFFFFFFFFFFFFFF:FFF:FFFFF  
+RX:Z:CAAGATCTCCGACGAC   QX:Z:FFFFFFFFFFFFFFFF   BC:Z:GTGGTACC   QT:Z:FFFFFFFF   XS:i:-64        AS:i:-62        XM:Z:0  AM:Z:0  XT:i:0  BX:Z:CAAGATCTCCGACGAC-1  OM:i:20
+```
+]
+
 ---
 
 # Longranger basic
 .pull-left[
-Input: Fastq
-Approx run time: A few hours.
-Output:
-*  unaligned Bam or fastq output.
-*  summary.csv file
+* Input: 
+  + Fastq
+* Run time: 
+  + A few hours.<br><br>
+* Output:
+  + unaligned Bam or fastq output.
+  + summary.csv file
 ]
-
 .pull-right[
-BAM TAGS .small[useful]
-*  BX - corrected barcode
-*  QX - barcode quality
-
-.tiny[`samtools view $bamfile`]  
-.tiny[`<header> <flags> <seq> <seqQ> BX:Z:AAACACCAGGGTTCGA`]
+* BAM TAGS 
+  + BX - corrected barcode
+  + QX - barcode quality
 ]
 
 ???
@@ -89,20 +111,22 @@ BAM TAGS .small[useful]
 # Longranger align
 BWA + 10X Lariat aligner
 .pull-left[
-Input: 
- + Fastq.<br>
-~Run time: 
- + 24 hours.<br>
-Output: 
+.baby-bear[
+* Input:
+  + Fastq.<br><br>
+* Run time:
+ + 24 hours.<br><br>
+* Output:
  + Aligned BAM
  + Alignment QC stats
+]
 ]
 .pull-right[
 Output bam tags:
 .baby-bear[
 * AS - Primary Alignment Score
 * XS - Secondary Alignment Score
-* TBC.
+* To be cont..
 ]
 ]
 
@@ -115,27 +139,29 @@ Second pass with the 10X lariat aligner.
 
 # Lariat Aligner
 
-Extra benefits
-Uses primary and secondary alignments alongside information of the GEM tag to:
+Extra alignment help, keeps both primary and secondary alignments alongside information of the GEM tag to:
 1. Boost confidence in the alignment score (AM)
 2. Use alignments with the same molecular tag to align to  repeat regions (XS)
 3. Overcome tandem duplications using GEM tag of secondary alignments (XT)
 
 ???
 
+AM tag: Increase the alignment score if the alignment is in a long molecule.
+XS: Did the aligner need assistance in flanking regions to align
+XT: Mark tandem duplications.
 
 ---
 
 # Longranger wgs
-Obtain SNP calling .small[GATK], phasing and SV information
+Obtain SNP calling .small[(GATK)], phasing and SV information
 
-Input: 
+* Input: 
  + Fastq.
-~ Run time: 
+* ~ Run time: 
  + Three days .small[w. 250GB RAM and 16 cores]
-Output:
+* Output:
  + List of structural variants in bed format.
- + BAM files with Phasing tags.
+ + BAM files with additional phasing tags.
  + .loupe file.
 
 ???
@@ -144,15 +170,19 @@ Output:
 ---
 
 # The Loupe file
-~ 5Gb file.
 
+.pull-left[
+~ 5Gb file.  
 Contains alignment information across the entire genome.
-Similar to an IGV browser.
 
-<img src=./images/full_sv_view.png width=60%>
+]
+.pull-right[
+<img src=./images/full_sv_view.png width=110%>
+]
 
 ???
 
+Similar to an IGV
 
 ---
 
@@ -166,7 +196,7 @@ Steps:
 3. Start loupe.
 4. ssh in (with binding) into that node.
 
-All code in the comments
+All code in the comments (press p)
 
 ???
 
@@ -178,13 +208,11 @@ chr1:152,355,549-152,755,549
 check the linked reads tab as well for this one.
 
 Duplication:
-chr6:165,000-495,000
-
-Het DUP:
+chr16:34,080,000-34,880,000;chr16:34,230,000-35,030,000
+chr6:0-626,484;chr6:0-626,484
 
 Homo INV:
-32: 7 54,287,991, 54376,000
-
+chr12:17,723,137-18,123,137;chr12:17,813,072-18,213,072
 `ssh username@headnode`
 `screen`
 `srun --mem=100G --time=2-0 --pty bash`
@@ -200,20 +228,50 @@ Homo INV:
 .pull-left[
 Miscellaneous:
 *  [ssh-bind ports](https://help.ubuntu.com/community/SSH/OpenSSH/PortForwarding)
-*  [screen]
-*  [slurm]
+*  [screen](https://www.rackaid.com/blog/linux-screen-tutorial-and-how-to)
+*  [slurm](https://slurm.schedmd.com/quickstart.html)
 ]
 
 .pull-right[
-10X video
-10X BAM Tags
-Loupe downloader
-NA12878 10X download
+10X related resources
+[10X video](https://10xgenomics.wistia.com/medias/2r0nal3n3j)
+[10X BAM Tags](https://support.10xgenomics.com/genome-exome/software/pipelines/latest/output/bam)
+[Loupe downloader](https://support.10xgenomics.com/genome-exome/software/downloads/latest)
+[NA12878 10X download](https://support.10xgenomics.com/genome-exome/datasets/2.2.1/NA12878_WGS_v2)
 ]
 
 ---
 
-# Thank yous
+## Thank yous
+
+.pull-left[
+AGRF
+.baby-bear[
+* R&D:
+    + Jafar Jabbari
+    + Kirby Siemering
+    + Azadeh Seidi (GIH)
+* Lab Ops:
+    + Matthew Tinning
+* Bioinformatics:
+    + Everyone!
+* IT:
+    + Douglas Morrison
+]
+]
+.pull-right[
+MGHA
+.baby-bear[
+*  New Tech. Working Group
+  + Natalie Thorne
+  + Stan Baudinette
+  + Simon Sadedin
+  + Sebastian Lunke
+  + Melanie O'Keefe
+  + Sarah Payton
+  + Juny Kesumadewi
+]
+]
 
 ???
 
