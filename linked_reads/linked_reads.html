@@ -36,6 +36,20 @@ https://10xgenomics.wistia.com/medias/2r0nal3n3j
 
 ---
 
+# A Micro-Glossary
+
+* Barcode
+  + A unique set of 14 nucleotides.
+* Molecule:
+  + The ~50Kb input molecule into the 10X system.
+* Read:
+  + ~200 bp containing genomic information and a barcode.
+* GEM:
+  + A single droplet containing identical barcodes
+  + Approximately 10 molecules exist inside per GEM.
+
+---
+
 # The Longranger pipeline.
 
 .center[&lt;img src=./images/10X_DIAGRAM.png width=50%&gt;]
@@ -162,8 +176,8 @@ Obtain SNP calling .small[(GATK)], phasing and SV information
 * ~ Run time: 
  + Three days .small[w. 250GB RAM and 16 cores]
 * Output:
- + List of structural variants in bed format.
- + BAM files with additional phasing tags.
+ + List of structural variants in .bed format.
+ + BAM files with additional haplotype phasing tags.
  + .loupe file.
 
 ???
@@ -195,7 +209,7 @@ Live Demonstration on a HPC.
 Steps:
 1. Allocate a node (be greedy)
 2. Copy all your .loupe files to a local space on the HPC node.
-3. Start loupe.
+3. Start the loupe application.
 4. ssh in (with binding) into that node.
 
 All code in the comments (press p)
