@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Nanopore Bioinformatics</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Alexis Lucattini - AGRF Bioinformatics" />
+    <link rel="stylesheet" href="libs\remark-css-0.0.1\NanoporeSequencingAtTheAGRF.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Nanopore Bioinformatics
+## Intro Resources and best practises
+### Alexis Lucattini - AGRF Bioinformatics
+### Tues 23 Oct 2018 - WEHI Seminar Room 2
+
+---
+
+
+## Nanopore Sequencing - PMI
+
+.pull-left[
+**Technical**
+* Very long sequencing reads
+* Single-molecule
+* Real-time
+* Portable
+* Low accuracy
+* Lower yields
+]
+.pull-right[
+**Financial**
+* Minimal start-up cost
+* Cheap for small uses of data
+* Relatively expensive per base
+]
+
+---
+
+## AGRF PromethION in focus
+BAM-Compare Nanoplot? Studenica sample I think.
+
+???
+
+todo: Add slide in here on our own yields, studenica sample?
+todo: sample-qc plot
+
+---
+
+## Bioinformatics is a bottleneck
+* Lots and lots of files (&gt;20M) &lt;br&gt;
+* Few ways to do one thing, benchmarking needed. &lt;br&gt;
+* Getting help and resources. &lt;br&gt;
+* Denovo assemblies have always been really hard. &lt;br&gt;
+* Portable bioinformatics is difficult.
+
+---
+
+## New methods for standard tasks
+.pull-left[
+.baby-bear[
+**Basecalling**
+* Not bcl2fastq.
+
+**Data QC**
+* Read length, yields, read quality
+* Fastq *indicitive* of read quality.
+]
+]
+.pull-right[
+.baby-bear[
+**Adapter trimming**
+* Nanopore reads have adapters too.
+
+**Alignment**
+* Different parameter settings required.
+]
+]
+
+---
+
+## New methods for novel tasks
+.pull-left[
+.baby-bear[
+**Assembly**
+* Longer reads overcome repeat regions
+* Longer contigs possible
+* Lower accuracy means more coverage required.
+
+**Structural variation**
+* High-confidence alignments can resolve novel arrangements
+]
+]
+.pull-right[
+.baby-bear[
+**Methylation**
+* No bisulphite treatment required.
+* PCR-prohibited
+
+**Haplotyping**
+* Overcome homogenous regions of the genome
+* Creating ultra-long haplotypes
+]
+]
+
+---
+
+## Basecalling methods
+### GPU &amp; CPU.
+* GPUs much faster. Dogfish current basecaller in PromethION.
+
+* Different algorithms give slightly different results.
+
+* Check out Ryan Wick's [base-calling comparison repo](https://github.com/rrwick/Basecalling-comparison)
+
+
+???
+
+---
+
+# WUB
+* Software package repository from ONT.
+* Similar to pysam API.
+* Handy plotting tools.
+
+.pull-left[
+[GitHub](https://www.github.com/nanoporetech/wub)
+]
+.pull-right[
+[Docs](https://wub.readthedocs.io/en/latest/)
+]
+
+???
+
+todo: Add bam-summary wub plot
+todo: Add github and docs as separate links
+
+---
+
+# NanoPlot
+
+* [Repo on GitHub](https://github.com/wdecoster/NanoPlot)
+* Also see NanoComp, NanoStat, NanoFilt and NanoLyse
+
+&lt;img src="https://github.com/wdecoster/NanoPlot/raw/master/examples/scaled_MappingQualityvsAverageBaseQuality_kde.png" width="55%"&gt;
+
+???
+
+todo: Get picture from NanoPlot
+
+---
+
+# Betaduck
+
+Set of scripts to tidy up and evaluate sequencing runs on PromethION Beta.
+Can be used on MinION datasets as well (make sure not to over-allocate resources on a laptop)
+
+https://www.github.com/alexiswl/betaduck
+
+???
+
+todo: add collective plot and events ratio over time
+
+---
+
+# Porechop, Filtlong, Unicycler
+
+Ryan Wick's repos set for:
+* demultiplexing ONT data.
+* Trimming adapters
+* Removing poor quality reads
+* Circular-hybrid assemblies
+
+https://github.com/rrwick
+
+???
+
+todo: add all github links
+
+---
+
+# Minimap2
+Make sure the index is an 'ont-index'.
+CS-tag, add page on this
+
+https://github.com/lh3/minimap2
+
+???
+
+todo: Add slide on the methylation front
+
+---
+
+# Nanopolish
+
+Jared T. Simpson's repo uses signal-level (fast5) data to:
+* Detecting methylation
+* Calling SNP level variants
+* Polishing genomes
+
+https://github.com/jts/nanopolish
+
+---
+
+# Tombo
+
+**ONT's methylation caller.**
+
+* Provides output of regions of significance
+* Can be captured as a 'wiggle' file to be viewed in a genome browser.
+
+https://github.com/nanoporetech/tombo
+
+---
+
+
+## Haplotyping methylation combo
+
+https://github.com/scottgigante/haplotyped-methylome
+
+???
+Mention of scott's paper, github and methylation paper
+todo: provide details of scott's pipeline.
+
+---
+
+## Some tutorial references
+
+https://github.com/timkahlke/toast2018
+
+https://github.com/HadrienG/tutorials/blob/master/docs/nanopore.md
+
+???
+
+todo: Describe each and use hyperlinks
+
+---
+class: genomics-innovation-hub, gih-slide-number
+
+## GIH
+
+* Come speak to us about nanopore sequencing data at the AGRF!
+
+Contact: &lt;a href="mailto:alexis.lucattini@agrf.org.au"&gt;Alexis Lucattini&lt;/a&gt;  
+Contact: &lt;a href="mailto:Jafar.Jabbari@agrf.org.au"&gt; Jafar Jabbari&lt;/a&gt;  
+.kinda-small[Website: &lt;a href="https://genomicsinnovationhub.org.au"&gt;GenomicsInnovationHub.org.au&lt;/a&gt;]]
+
+---
+
+## Thank you
+
+.pull-left[
+.baby-bear[
+* R&amp;D:
+    + Kirby Siemering
+    + Jafar Jabbari
+* Lab Ops:
+    + Matthew Tinning
+* IT:
+    + Chris Hunt
+    + Douglas Morrison
+    + Gismon Thomas
+* PR:
+    + Desley Pitcher
+]
+]
+.pull-right[
+.baby-bear[
+* WEHI
+    + Matthew Ritchie
+    + Quentin Gouil
+    + Scott Gigante
+    + Chris Woodruff
+]
+]
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "pygments",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

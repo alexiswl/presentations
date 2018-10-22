@@ -1,0 +1,318 @@
+---
+title: "Nanopore Bioinformatics"
+subtitle: "Intro Resources and best practises"
+author: "Alexis Lucattini - AGRF Bioinformatics"
+date: "Tues 23 Oct 2018 - WEHI Seminar Room 2"
+output:
+  xaringan::moon_reader:
+    css: "libs/remark-css-0.0.1/NanoporeSequencingAtTheAGRF.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: pygments
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+## Nanopore Sequencing - PMI
+
+.pull-left[
+**Technical**
+* Very long sequencing reads
+* Single-molecule
+* Real-time
+* Portable
+* Low accuracy
+* Lower yields
+]
+.pull-right[
+**Financial**
+* Minimal start-up cost
+* Cheap for small uses of data
+* Relatively expensive per base
+]
+
+---
+
+## AGRF PromethION in focus
+---
+
+# The PromethION!
+
+Kit-9, sample sensitive, great N50!
+
+.pull-left[
+<img src=./images/example.yield.png width=80%>
+]
+.pull-right[
+<img src=./images/example.weighted.hist.png width=80%>
+]
+
+---
+
+## Bioinformatics is a bottleneck
+* Lots and lots of files (>20M) <br>
+* Few ways to do one thing, benchmarking needed. <br>
+* Getting help and resources. <br>
+* Denovo assemblies have always been really hard. <br>
+* Portable bioinformatics is difficult.
+
+---
+
+## New methods for standard tasks
+.pull-left[
+.baby-bear[
+**Basecalling**
+* Not bcl2fastq.
+
+**Data QC**
+* Read length, yields, read quality
+* Fastq *indicitive* of read quality.
+]
+]
+.pull-right[
+.baby-bear[
+**Adapter trimming**
+* Nanopore reads have adapters too.
+
+**Alignment**
+* Different parameter settings required.
+]
+]
+
+---
+
+## New methods for novel tasks
+.pull-left[
+.baby-bear[
+**Assembly**
+* Longer reads overcome repeat regions
+* Longer contigs possible
+* Lower accuracy means more coverage required.
+
+**Structural variation**
+* High-confidence alignments can resolve novel arrangements
+]
+]
+.pull-right[
+.baby-bear[
+**Methylation**
+* No bisulphite treatment required.
+* PCR-prohibited
+
+**Haplotyping**
+* Overcome homogenous regions of the genome
+* Creating ultra-long haplotypes
+]
+]
+
+---
+
+## Basecalling methods
+### GPU & CPU.
+* GPUs much faster. Dogfish current basecaller in PromethION.
+
+* Different algorithms give slightly different results.
+
+* Check out Ryan Wick's [base-calling comparison repo](https://github.com/rrwick/Basecalling-comparison)
+
+
+???
+
+---
+
+## WUB
+* Software package repository from ONT.
+* Similar to pysam API.
+* Handy plotting tools.
+
+.pull-left[
+[GitHub](https://www.github.com/nanoporetech/wub)
+]
+.pull-right[
+[Docs](https://wub.readthedocs.io/en/latest/)
+]
+
+## WUB cont.
+
+<img src=./images/basestats.png width=80%>
+
+---
+
+## NanoPlot
+
+* [Repo on GitHub](https://github.com/wdecoster/NanoPlot)
+* Also see NanoComp, NanoStat, NanoFilt and NanoLyse
+
+<img src="https://github.com/wdecoster/NanoPlot/raw/master/examples/scaled_MappingQualityvsAverageBaseQuality_kde.png" width="25%">
+
+???
+
+---
+
+## Betaduck
+
+* Package to tidy up and evaluate sequencing runs on PromethION Beta.
+* Can be used on MinION datasets as well (make sure not to over-allocate resources on a laptop)
+
+.pull-left[
+[GitHub](https://www.github.com/alexiswl/betaduck)
+]
+.pull-right[
+[DockerHub](https://www.dockerhub.com/alexiswl/betaduck)
+]
+
+---
+
+## Betaduck cont.
+<img src="https://github.com/alexiswl/betaduck/raw/master/images/example.pair_plot.png" width="25%">
+
+---
+
+## Betaduck cont.
+<img src="https://github.com/alexiswl/betaduck/raw/master/images/example.events_ratio.png" width="25%">
+
+---
+
+## Betaduck cont.
+<img src="https://github.com/alexiswl/betaduck/raw/master/images/example.pore_speed.png" width="25%">
+
+---
+
+## Porechop, Filtlong, Unicycler
+
+Ryan Wick's repos set for:
+* [Demultiplexing / Trimming Adapters](https://github.com/rrwick/porechop)
+* [Removing poor quality reads](https://github.com/rrwick/filtlong)
+* [Circular-hybrid assemblies](https://github.com/rrwick/unicycler)
+
+
+???
+
+
+---
+
+# Minimap2
+
+* Current gold-standard aligner for ONT data.
+* Make sure the index is an 'ont-index' when generating index.
+* Alignments come with CS-string.
+
+.pull-left[
+[GitHub](https://github.com/lh3/minimap2)
+]
+.pull-right[
+[GitHub Guide](https://github.com/lh3/minimap2#users-guide)
+]
+
+---
+
+# The CS tag and MD tag
+.pull-left[
+.baby-bear[
+* CS tag - verbose version of MD tag
+  + Easier for parsing.
+  + Relatively new.
+  + MD tag still required for some parsers.
+    + Pipe through `samtools calmd` prior to sorting.
+]
+]
+.pull-right[
+.baby-bear[
+* CS tag example:
+  + `:6-ata:10+gtc:4*at:3`
+  + `:[0-9]+ is an identical block`
+  + '-[ACTG]+ is a deletion`
+  + '+[ACTG]+ is an insersion
+  + '*XY' is a substitution with base X subsituted for base y.
+]
+]
+
+---
+
+# Nanopolish
+
+Jared T. Simpson's [nanopolish](https://github.com/jts/nanopolish) uses signal-level (fast5) data to:
+* Detecting methylation
+* Calling SNP level variants
+* Polishing genomes
+
+---
+
+# Tombo
+
+**ONT's methylation caller.**
+
+* Provides output of regions of significance
+* Can be captured as a 'wiggle' file to be viewed in a genome browser.
+
+.pull-left[
+[GitHub](https://github.com/nanoporetech/tombo)
+]
+.pull-right[
+[Docs](https://nanoporetech.github.io/tombo/tutorials.html)
+]
+
+---
+
+
+## Haplotyping methylation combo
+
+https://github.com/scottgigante/haplotyped-methylome
+
+???
+Mention of scott's paper, github and methylation paper
+todo: provide details of scott's pipeline.
+
+---
+
+## Some tutorial references
+
+[Tim Kahlke - Toast 2018](https://github.com/timkahlke/toast2018)
+VM based tutorial. Covers QC to Assembly.
+
+https://github.com/HadrienG/tutorials/blob/master/docs/nanopore.md
+
+???
+
+todo: Describe each and use hyperlinks
+
+---
+class: genomics-innovation-hub, gih-slide-number
+
+## GIH
+
+* Come speak to us about nanopore sequencing data at the AGRF!
+
+Contact: <a href="mailto:alexis.lucattini@agrf.org.au">Alexis Lucattini</a>  
+Contact: <a href="mailto:Jafar.Jabbari@agrf.org.au"> Jafar Jabbari</a>  
+.kinda-small[Website: <a href="https://genomicsinnovationhub.org.au">GenomicsInnovationHub.org.au</a>]]
+
+---
+
+## Thank you
+
+.pull-left[
+.baby-bear[
+* R&D:
+    + Kirby Siemering
+    + Jafar Jabbari
+* Lab Ops:
+    + Matthew Tinning
+* IT:
+    + Chris Hunt
+    + Douglas Morrison
+    + Gismon Thomas
+* PR:
+    + Desley Pitcher
+]
+]
+.pull-right[
+.baby-bear[
+* WEHI
+    + Matthew Ritchie
+    + Quentin Gouil
+    + Scott Gigante
+    + Chris Woodruff
+]
+]
+
