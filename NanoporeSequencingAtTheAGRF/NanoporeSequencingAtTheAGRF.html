@@ -39,20 +39,27 @@ class: center, middle, inverse, title-slide
 ---
 
 ## AGRF PromethION in focus
-BAM-Compare Nanoplot? Studenica sample I think.
 
-???
+Kit-9, sample sensitive, great N50!
 
-todo: Add slide in here on our own yields, studenica sample?
-todo: sample-qc plot
+.pull-left[
+&lt;img src=./images/example.yield.png width=80%&gt;
+]
+.pull-right[
+&lt;img src=./images/example.weighted.hist.png width=80%&gt;
+]
 
 ---
 
 ## Bioinformatics is a bottleneck
-* Lots and lots of files (&gt;20M) &lt;br&gt;
-* Few ways to do one thing, benchmarking needed. &lt;br&gt;
-* Getting help and resources. &lt;br&gt;
-* Denovo assemblies have always been really hard. &lt;br&gt;
+* Lots and lots of files (&gt;20M)
+
+* Few ways to do one thing, benchmarking needed.
+
+* Getting help and resources, community in development.
+
+* Denovo assemblies have always been really hard.
+
 * Portable bioinformatics is difficult.
 
 ---
@@ -112,14 +119,14 @@ todo: sample-qc plot
 
 * Different algorithms give slightly different results.
 
-* Check out Ryan Wick's [base-calling comparison repo](https://github.com/rrwick/Basecalling-comparison)
+* .small[Check out Ryan Wick's [base-calling comparison repo](https://github.com/rrwick/Basecalling-comparison)]
 
 
 ???
 
 ---
 
-# WUB
+## WUB
 * Software package repository from ONT.
 * Similar to pysam API.
 * Handy plotting tools.
@@ -131,75 +138,129 @@ todo: sample-qc plot
 [Docs](https://wub.readthedocs.io/en/latest/)
 ]
 
-???
-
-todo: Add bam-summary wub plot
-todo: Add github and docs as separate links
-
 ---
 
-# NanoPlot
+## WUB cont.
 
+.pull-left[
+&lt;img src=./images/basestats.png width=100%&gt;
+]
+.pull-right[
+&lt;img src=./images/per_read_accuracies.png width=100%&gt;
+
+]
+---
+
+## NanoPlot
+
+.pull-left[
+.baby-bear[
+* Plot run metrics for a MinION run
 * [Repo on GitHub](https://github.com/wdecoster/NanoPlot)
-* Also see NanoComp, NanoStat, NanoFilt and NanoLyse
+* Also see 
+  + NanoComp
+  + NanoStat
+  + NanoFilt
+  + NanoLyse
+]
+]
 
-&lt;img src="https://github.com/wdecoster/NanoPlot/raw/master/examples/scaled_MappingQualityvsAverageBaseQuality_kde.png" width="55%"&gt;
-
-???
-
-todo: Get picture from NanoPlot
-
----
-
-# Betaduck
-
-Set of scripts to tidy up and evaluate sequencing runs on PromethION Beta.
-Can be used on MinION datasets as well (make sure not to over-allocate resources on a laptop)
-
-https://www.github.com/alexiswl/betaduck
+.pull-right[
+&lt;img src="https://github.com/wdecoster/NanoPlot/raw/master/examples/scaled_MappingQualityvsAverageBaseQuality_kde.png" width="100%"&gt;
+]
 
 ???
 
-todo: add collective plot and events ratio over time
+---
+
+## Betaduck
+
+* Package to tidy up and evaluate sequencing runs on PromethION Beta.
+* Can be used on MinION datasets as well
+  + small[make sure not to over-allocate resources on a laptop]
+
+.pull-left[
+[GitHub](https://www.github.com/alexiswl/betaduck)
+]
+.pull-right[
+[DockerHub](https://www.dockerhub.com/alexiswl/betaduck)
+]
 
 ---
 
-# Porechop, Filtlong, Unicycler
+## Betaduck cont.
+
+.pull-left[
+&lt;img src="https://github.com/alexiswl/betaduck/raw/master/images/example.pair_plot.png" width="95%"&gt;
+]
+.pull-right[
+&lt;img src="https://github.com/alexiswl/betaduck/raw/master/images/example.flowcellmap.png" width="95%"&gt;
+]
+---
+
+## Betaduck cont.
+.pull-left[
+&lt;img src="images/example.events_ratio.png" width="100%"&gt;
+]
+.pull-right[
+&lt;img src="images/example.pore_speed.png" width="100%"&gt;
+
+]
+---
+
+## Porechop, Filtlong, Unicycler
 
 Ryan Wick's repos set for:
-* demultiplexing ONT data.
-* Trimming adapters
-* Removing poor quality reads
-* Circular-hybrid assemblies
-
-https://github.com/rrwick
-
-???
-
-todo: add all github links
+* [Demultiplexing / Trimming Adapters](https://github.com/rrwick/porechop)
+* [Removing poor quality reads](https://github.com/rrwick/filtlong)
+* [Generating Circular-hybrid assemblies](https://github.com/rrwick/unicycler)
 
 ---
 
 # Minimap2
-Make sure the index is an 'ont-index'.
-CS-tag, add page on this
 
-https://github.com/lh3/minimap2
+* Current gold-standard aligner for ONT data.
+* Make sure the index is an 'ont-index' when generating index.
+* Alignments come with CS-string.
 
-???
+.pull-left[
+[GitHub](https://github.com/lh3/minimap2)
+]
+.pull-right[
+[GitHub Guide](https://github.com/lh3/minimap2#users-guide)
+]
 
-todo: Add slide on the methylation front
+---
+
+# The CS tag and MD tag
+.pull-left[
+.baby-bear[
+* CS tag - verbose version of MD tag
+  + Easier for parsing.
+  + Relatively new.
+  + MD tag still required for some parsers.
+    + Pipe through `samtools calmd` prior to sorting.
+]
+]
+.pull-right[
+.baby-bear[
+* CS tag example:
+  + `:6-ata:10+gtc:4*at:3`
+  + `:[0-9]+ is an identical block`
+  + '-[ACTG]+ is a deletion`
+  + '+[ACTG]+ is an insersion
+  + '*XY' is a substitution with base X subsituted for base y.
+]
+]
 
 ---
 
 # Nanopolish
 
-Jared T. Simpson's repo uses signal-level (fast5) data to:
+Jared T. Simpson's [nanopolish](https://github.com/jts/nanopolish) uses signal-level (fast5) data to:
 * Detecting methylation
 * Calling SNP level variants
 * Polishing genomes
-
-https://github.com/jts/nanopolish
 
 ---
 
@@ -210,15 +271,28 @@ https://github.com/jts/nanopolish
 * Provides output of regions of significance
 * Can be captured as a 'wiggle' file to be viewed in a genome browser.
 
-https://github.com/nanoporetech/tombo
+.pull-left[
+[GitHub](https://github.com/nanoporetech/tombo)
+]
+.pull-right[
+[Docs](https://nanoporetech.github.io/tombo/tutorials.html)
+]
 
 ---
 
 
-## Haplotyping methylation combo
+## Haplotyping-methylation combo
 
-https://github.com/scottgigante/haplotyped-methylome
+.center[
+&lt;img src="images/scott_paper_methylation_differences.png" width="55%"&gt;
+]
 
+.pull-left[
+[Bio-Xriv Paper](https://www.biorxiv.org/content/early/2018/10/17/445924)
+]
+.pull-right[
+[Scott's GitHub Haplotype-Methylome Repo](https://github.com/scottgigante/haplotyped-methylome)
+]
 ???
 Mention of scott's paper, github and methylation paper
 todo: provide details of scott's pipeline.
@@ -227,13 +301,14 @@ todo: provide details of scott's pipeline.
 
 ## Some tutorial references
 
-https://github.com/timkahlke/toast2018
+[Tim Kahlke - Toast 2018](https://github.com/timkahlke/toast2018)  
+VM based tutorial. Covers QC to methylation to assembly.
 
-https://github.com/HadrienG/tutorials/blob/master/docs/nanopore.md
+
+[Hadrien Gourle](https://github.com/HadrienG/tutorials/blob/master/docs/nanopore.md)  
+Simple fastq to assembly notebook.
 
 ???
-
-todo: Describe each and use hyperlinks
 
 ---
 class: genomics-innovation-hub, gih-slide-number
@@ -244,7 +319,7 @@ class: genomics-innovation-hub, gih-slide-number
 
 Contact: &lt;a href="mailto:alexis.lucattini@agrf.org.au"&gt;Alexis Lucattini&lt;/a&gt;  
 Contact: &lt;a href="mailto:Jafar.Jabbari@agrf.org.au"&gt; Jafar Jabbari&lt;/a&gt;  
-.kinda-small[Website: &lt;a href="https://genomicsinnovationhub.org.au"&gt;GenomicsInnovationHub.org.au&lt;/a&gt;]]
+.kinda-small[Website: &lt;a href="https://genomicsinnovationhub.org.au"&gt;GenomicsInnovationHub.org.au&lt;/a&gt;]
 
 ---
 
