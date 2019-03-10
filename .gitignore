@@ -1,2 +1,4 @@
 *.xml
 *.iml
+.Rproj.user
+*/packrat/lib*/

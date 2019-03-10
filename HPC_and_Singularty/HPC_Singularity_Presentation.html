@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HPC and Singularity</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Alexis Lucattini" />
+    <link rel="stylesheet" href="libs\remark-css-0.0.1\HPC_and_Singularty.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# HPC and Singularity
+## <br> A Guide to Go
+### Alexis Lucattini
+### Wed 13th March 2019
+
+---
+
+
+# Introduction
+.pull-left[
+## What we will cover:
+.baby-bear[
+Building from pre-built containers
+Installations via a recipe script
+Running your containers on a HPC
+Developing module files for your containers
+]]
+.pull-right[
+## What we wont cover:
+.baby-bear[
+Using 'make'
+Using 'gcc'
+Using 'apt'
+Using 'docker'
+Using 'sbatch'
+]
+]
+
+---
+
+# Why Containers?
+
+.center[&lt;img src=https://imgs.xkcd.com/comics/containers.png width=45%&gt;]
+
+---
+
+# Why Containers
+## Reproducible Results
+
+.center[&lt;img src=images/dolly_reproducible.jpg width=35%&gt;]
+
+---
+
+# Why Containers
+## Environment independent
+
+.center[&lt;img src=images/polar_bear_env.jpg width=50%&gt;]
+
+---
+
+# Why Containers
+## Easily installation
+
+.center[&lt;img src=images/britney.jpg width=45%&gt;]
+
+---
+
+# Which containers
+## Singularity &gt; Docker
+.pull-left[
+.baby-bear[
+    + HPC friendly (no root required for running)
+    + Reduce security issues
+    + Smaller overhead
+    + Segmented recipes
+    + Less community
+    + Can import dockerfiles anyways
+]
+]
+.pull-right[
+.baby-bear[
++ Steep Learning curve
++ Some system-admin knowledge required 
++ Developing technology
++ Locale Inheritance
+]
+]
+
+???
+
+(apt-get installation methods)
+(some bugs fixed required)
+ 
+---
+
+# Overview of environment wrapping
+
+.pull-left[
+.baby-bear[
++ Containers and HPC scheduling initially can be quite overwhelming.&lt;br&gt;&lt;/br&gt; 
++ This diagram is not intended to intimidate but for debugging assistance.
+]
+]
+.pull-right[
+.center[&lt;img src=images/sbatch_singularity_diagram.png width=100%&gt;]
+]
+
+---
+
+# Installation Overview
+
+.center[&lt;img src=images/singularity_diagram.png width=80%&gt;]
+
+---
+
+# Building a container
+
+.pull-left[
+.baby-bear[
++ Choose a base container to start with.&lt;br&gt;&lt;/br&gt;
++ Bases can be found at [SingularityHub repo](https://singularity-hub.org/collections)&lt;br&gt;&lt;/br&gt;
++ Or from the [DockerHub repo](https://hub.docker.com/).&lt;br&gt;&lt;/br&gt;
+]
+]
+.pull-right[
+.baby-bear[
++ Use the `%runscript` to specfiy which command to run inside the container.&lt;br&gt;&lt;/br&gt;
++ Usually prefix with 'exec' and end with `${@}` which represents any trailing parameters&lt;br&gt;&lt;/br&gt;
+]
+]
+
+
+---
+
+.pull-left[
+### DockerHub example
+
+```bash
+$ cat recipe.docker
+BootStrap: docker
+From: r-base:3.5.1
+
+%runscript
+exec R ${@}
+```
+]
+.pull-right[
+### SingularityHub example
+
+```bash
+$ cat recipe.singularity
+BootStrap: shub
+From: MPIB/singularity-r:3.5.1
+
+%runscript
+exec R ${@}
+```
+]
+
+---
+
+# Building the container
+
+### Dockerhub Example
+
+```bash
+$ sudo singularity build \
+  r_from_docker_3.5.2.simg recipe
+```
+
+
+### Singularity Example
+
+```bash
+$ sudo singularity build \
+  r_from_shub_3.5.2.simg recipe
+```
+
+---
+
+# Running the container
+
+With just those two lines we now have containers that can the R console!
+
+```bash
+$ singularity run r_from_shub_3.5.2.simg
+```
+
+---
+
+# Shell inside the container
+
+.pull-left[
+.baby-bear[
+*Why shell*  
+Curious to see what's under the hood?
+We can shell into the container using the command below,
+use `exit` to exit the container.
+]
+]
+.pull-right[
+.baby-bear[
+*Traversing activity*  
+When inside the container try the following commands.  
+`ls /data`  
+`ls /home`  
+Which one of these worked? What does this mean?
+]
+]
+
+
+```bash
+$ singularity shell r_from_shub_3.5.2.simg
+```
+
+---
+
+# Specify an installation script
+
+
+```bash
+$ cat recipe.singularity
+BootStrap: shub
+From: MPIB/singularity-r:3.5.1
+
+%help
+To get started with this image, try
+singularity run r_from_shub_3.5.1.simg
+
+
+%post
+# Preinstallall the tidyverse and BiocManager for the users
+Rscript --vanilla -e 'install.packages("tidyverse")'
+Rscript --vanilla -e 'install.packages("BiocManager")'
+
+%runscript
+exec R ${@}
+```
+
+???
+
+The R container is pretty good, but maybe we could give our users a bit of a head-start. Using the %post section we’ll preinstall a few packages to get them going.
+
+---
+
+# The pain of R
+.baby-bear[
+Oh dear, it appears we don’t have a CRAN mirror.  
+We can add one in using %files section and ensure it’s there for all users.
+]
+
+
+.tiny[
+
+```bash
+$ cat recipe.singularity
+BootStrap: shub
+From: MPIB/singularity-r:3.5.1
+
+%help
+To get started with this image, try
+singularity run r_from_shub_3.5.1.simg
+
+%files
+r_profile.site /usr/local/lib/R/etc/Rprofile.site
+
+%post
+Rscript --vanilla -e 'install.packages("tidyverse")'
+Rscript --vanilla -e 'install.packages("BiocManager")'
+
+%runscript
+exec R ${@}
+```
+]
+
+???
+
+TODO: link to the rprofile file.
+
+---
+
+# Apps
+
+Our container now runs R interactively.  
+This may not suit the needs of everyone.
+
+* Apps allow users to specify what commands they wish to run.
+* Apps can also have their own specific:
+  + %files
+  + %environment
+  + %post
+
+Just specify with the %app prefix and complete with the app name.
+
+???
+
+But say our user just needs the R platform, not the interactive suite? We could create a new container with a new %runscript parameter that use Rscript instead of R. Seems like a waste of a container. So this segues nicely into Apps.
+
+---
+
+# App example
+
+
+```bash
+$ cat recipe.singularity
+BootStrap: shub
+From: MPIB/singularity-r:3.5.1
+
+%help
+To get started with this image, try
+singularity run r_from_shub_3.5.1.simg
+
+%apphelp Rscript
+Use container in non-interactive mode
+singularity run r_from_shub.3.5.2.simg --no-init-file my_r_script
+
+%apprun Rscript
+exec Rscript ${@}
+
+%files
+r_profile.site /usr/local/lib/R/etc/Rprofile.site
+
+%post
+Rscript --vanilla -e 'install.packages("tidyverse")'
+Rscript --vanilla -e 'install.packages("BiocManager")'
+
+%runscript
+exec R ${@}
+
+$ sudo singularity build r_from_shub_3.5.1.simg recipe
+```
+
+---
+
+# App example
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "pygments",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
