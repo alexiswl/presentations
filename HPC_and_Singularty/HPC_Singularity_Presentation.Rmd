@@ -17,21 +17,21 @@ output:
 
 # Introduction
 .pull-left[
-## What we will cover:
+## Covered:
 .baby-bear[
-Building from pre-built containers
-Installations via a recipe script
-Running your containers on a HPC
-Developing module files for your containers
+* Building from pre-built containers  
+* Installations via a recipe
+* Running containers on your HPC  
+* Developing module files for containers  
 ]]
 .pull-right[
-## What we wont cover:
+## Not covered:
 .baby-bear[
-Using 'make'
-Using 'gcc'
-Using 'apt'
-Using 'docker'
-Using 'sbatch'
+* Using 'make'  
+* Using 'gcc'  
+* Using 'apt'  
+* Using 'docker'  
+* Using 'sbatch'  
 ]
 ]
 
@@ -92,7 +92,7 @@ Using 'sbatch'
  
 ---
 
-# Overview of environment wrapping
+# Environment wrapping
 
 .pull-left[
 .baby-bear[
@@ -131,8 +131,10 @@ Using 'sbatch'
 
 ---
 
+# Examples
+
 .pull-left[
-### DockerHub example
+## DockerHub
 ```{bash, eval=FALSE}
 $ cat recipe.docker
 BootStrap: docker
@@ -143,7 +145,7 @@ exec R ${@}
 ```
 ]
 .pull-right[
-### SingularityHub example
+## SingularityHub
 ```{bash, eval=FALSE}
 $ cat recipe.singularity
 BootStrap: shub
@@ -208,8 +210,8 @@ $ singularity shell r_from_shub_3.5.2.simg
 
 ---
 
-# Specify an installation script
-
+# Write a recipe
+.small-code[
 ```{bash, eval=FALSE}
 $ cat recipe.singularity
 BootStrap: shub
@@ -228,36 +230,41 @@ Rscript --vanilla -e 'install.packages("BiocManager")'
 %runscript
 exec R ${@}
 ```
+]
+
+.footnote[
+If this script fails for you, please see the next slide before panicking
+]
 
 ???
 
-The R container is pretty good, but maybe we could give our users a bit of a head-start. Using the %post section we’ll preinstall a few packages to get them going.
+The R container is pretty good, but maybe we could give our users a bit of a head-start.   
+Using the %post section we’ll preinstall a few packages to get them going.
+If this script fails for you, you've done good.
 
 ---
 
-# The pain of R
+# Adding files
 .baby-bear[
-Oh dear, it appears we don’t have a CRAN mirror.  
-We can add one in using %files section and ensure it’s there for all users.
+No CRAN mirror specified?  
+No worries, we can add [one](rprofile.site) in using the %files section.
 ]
 
-
-.tiny[
-```{bash, eval=FALSE, size='tiny'}
+.small-code[
+```{bash, eval=FALSE}
 $ cat recipe.singularity
 BootStrap: shub
 From: MPIB/singularity-r:3.5.1
 
 %help
-To get started with this image, try
-singularity run r_from_shub_3.5.1.simg
+...
 
 %files
 r_profile.site /usr/local/lib/R/etc/Rprofile.site
 
 %post
 Rscript --vanilla -e 'install.packages("tidyverse")'
-Rscript --vanilla -e 'install.packages("BiocManager")'
+...
 
 %runscript
 exec R ${@}
@@ -272,8 +279,9 @@ TODO: link to the rprofile file.
 
 # Apps
 
-Our container now runs R interactively.  
-This may not suit the needs of everyone.
+.baby-bear[
+Our container now runs R interactively,  
+however, this may not suit the needs of everyone.
 
 * Apps allow users to specify what commands they wish to run.
 * Apps can also have their own specific:
@@ -282,6 +290,7 @@ This may not suit the needs of everyone.
   + %post
 
 Just specify with the %app prefix and complete with the app name.
+]
 
 ???
 
@@ -291,14 +300,14 @@ But say our user just needs the R platform, not the interactive suite? We could 
 
 # App example
 
+.small-code[
 ```{bash, eval=FALSE}
 $ cat recipe.singularity
 BootStrap: shub
 From: MPIB/singularity-r:3.5.1
 
 %help
-To get started with this image, try
-singularity run r_from_shub_3.5.1.simg
+...
 
 %apphelp Rscript
 Use container in non-interactive mode
@@ -307,20 +316,19 @@ singularity run r_from_shub.3.5.2.simg --no-init-file my_r_script
 %apprun Rscript
 exec Rscript ${@}
 
+...
 %files
-r_profile.site /usr/local/lib/R/etc/Rprofile.site
-
 %post
-Rscript --vanilla -e 'install.packages("tidyverse")'
-Rscript --vanilla -e 'install.packages("BiocManager")'
-
 %runscript
-exec R ${@}
+...
 
-$ sudo singularity build r_from_shub_3.5.1.simg recipe
 ```
+]
 
 ---
 
-# App example
+# TODO
 
+commentary,
+environment,
+biocontainers

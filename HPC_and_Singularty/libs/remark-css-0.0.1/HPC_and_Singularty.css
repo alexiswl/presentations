@@ -23,7 +23,7 @@ a, a > code {
   position: absolute;
   bottom: 3em;
   padding-right: 4em;
-  font-size: 90%;
+  font-size: 50%;
 }
 .remark-code, .remark-inline-code { font-family: 'Source Code Pro', 'Lucida Console', Monaco, monospace; }
 .remark-code-line-highlighted     { background-color: #ffff88; }
@@ -79,9 +79,19 @@ blockquote {
 .kinda-small {
   font-size: 55%;
 }
+
 .tiny {
   font-size: 45%
 }
+
+.small-code .remark-code{
+  font-size: 55%;
+}
+
+.tiny-code .remark-code{
+  font-size: 45%;
+}
+
 
 .h1-with-images h1 {
   margin-bottom: 0px;
@@ -102,6 +112,15 @@ blockquote {
                        padding-bottom: 1em;
                        
                      }
+
+.remark-slide-content h1{
+  margin-bottom: 0;
+}                    
+
+.remark-slide-content h3{
+  margin-top: 0;
+}    
+
 
 .hint-slide{
                        padding-top: 5.5em;
