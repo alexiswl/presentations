@@ -30,11 +30,12 @@ class: center, middle, inverse, title-slide
 .pull-right[
 ## Not covered:
 .baby-bear[
-* Using 'make'  
-* Using 'gcc'  
-* Using 'apt'  
-* Using 'docker'  
-* Using 'sbatch'  
+* Using 
+  + 'make'  
+  + 'gcc'  
+  + 'apt'  
+  + 'docker'  
+  + 'sbatch'  
 ]
 ]
 
@@ -67,45 +68,50 @@ class: center, middle, inverse, title-slide
 
 ---
 
-# Which containers
-## Singularity &gt; Docker
+# Why Containers
+## Reduce conflicts
+.center[![gromit_gif](images/gromit.gif)]
+
+???
+
+Without using containers, one must ensure that all modules that may be loaded at once are compatible, leading to a lot of tinkering with code.
+
+
+---
+
+# Singularity
 .pull-left[
 .baby-bear[
-    + HPC friendly (no root required for running)
-    + Reduce security issues
-    + Smaller overhead
-    + Segmented recipes
-    + Less community
-    + Can import dockerfiles anyways
+* HPC friendly
+  + No root required for running
+  + Reduce security issues&lt;br&gt;&lt;/br&gt;
+* Smaller overhead&lt;br&gt;&lt;/br&gt;
+* Segmented recipes&lt;br&gt;&lt;/br&gt;
+* Can import Docker recipes&lt;br&gt;&lt;/br&gt;
 ]
 ]
 .pull-right[
 .baby-bear[
-+ Steep Learning curve
-+ Some system-admin knowledge required 
-+ Developing technology
-+ Locale Inheritance
+* Steep Learning curve&lt;br&gt;&lt;/br&gt;
+* Some system-admin knowledge required
+  + apt-get installation methods&lt;br&gt;&lt;/br&gt;
+* Developing technology&lt;br&gt;&lt;/br&gt;
+* Locale Inheritance&lt;br&gt;&lt;/br&gt;
+* Small community&lt;br&gt;&lt;/br&gt;
 ]
 ]
 
 ???
 
-(apt-get installation methods)
-(some bugs fixed required)
  
 ---
 
 # Environment wrapping
-
-.pull-left[
 .baby-bear[
 + Containers and HPC scheduling initially can be quite overwhelming.&lt;br&gt;&lt;/br&gt; 
 + This diagram is not intended to intimidate but for debugging assistance.
 ]
-]
-.pull-right[
-.center[&lt;img src=images/sbatch_singularity_diagram.png width=100%&gt;]
-]
+.center[&lt;img src=images/sbatch_singularity_diagram.png width=55%&gt;]
 
 ---
 
@@ -165,26 +171,27 @@ exec R ${@}
 
 # Building the container
 
-### Dockerhub Example
+.pull-left[
+## Dockerhub
 
 ```bash
 $ sudo singularity build \
   r_from_docker_3.5.2.simg recipe
 ```
-
-
-### Singularity Example
+]
+.pull-right[
+## SingularityHub
 
 ```bash
 $ sudo singularity build \
   r_from_shub_3.5.2.simg recipe
 ```
-
+]
 ---
 
 # Running the container
 
-With just those two lines we now have containers that can the R console!
+With just those two lines we now have containers that can the R console!&lt;br&gt;&lt;/br&gt;
 
 ```bash
 $ singularity run r_from_shub_3.5.2.simg
@@ -196,22 +203,22 @@ $ singularity run r_from_shub_3.5.2.simg
 
 .pull-left[
 .baby-bear[
-*Why shell*  
-Curious to see what's under the hood?
-We can shell into the container using the command below,
-use `exit` to exit the container.
+**Why shell**&lt;br&gt;&lt;/br&gt;
+Curious to see what's under the hood?  
+We can shell into the container using the command below.
+Use `exit` to exit the container.  
 ]
 ]
 .pull-right[
 .baby-bear[
-*Traversing activity*  
+**Traversing activity**&lt;br&gt;&lt;/br&gt;
 When inside the container try the following commands.  
 `ls /data`  
 `ls /home`  
 Which one of these worked? What does this mean?
 ]
 ]
-
+&lt;br&gt;&lt;/br&gt;
 
 ```bash
 $ singularity shell r_from_shub_3.5.2.simg
@@ -277,8 +284,6 @@ r_profile.site /usr/local/lib/R/etc/Rprofile.site
 Rscript --vanilla -e 'install.packages("tidyverse")'
 ...
 
-%runscript
-exec R ${@}
 ```
 ]
 
@@ -294,11 +299,11 @@ TODO: link to the rprofile file.
 Our container now runs R interactively,  
 however, this may not suit the needs of everyone.
 
-* Apps allow users to specify what commands they wish to run.
+* Apps allow users to specify what commands they wish to run.&lt;br&gt;&lt;/br&gt;
 * Apps can also have their own specific:
   + %files
   + %environment
-  + %post
+  + %post&lt;br&gt;&lt;/br&gt;
 
 Just specify with the %app prefix and complete with the app name.
 ]
@@ -339,10 +344,105 @@ exec Rscript ${@}
 
 ---
 
-# TODO
+# Environment
 
-commentary,
-environment
+Singularity environments can be managed in three ways, with the hierachies as follows.
+
+* exporting variables with the `SINGULARITYENV_` prefix prior to running.
+* exporting variables in %post or %apppost
+* exporting in %environment or %appenvironment
+
+For examples, please visit the [docs](https://www.sylabs.io/guides/2.5/user-guide/environment_and_metadata.html)
+
+
+---
+
+# BioContainers
+
+.pull-left[
+.baby-bear[
+Most common installations, can be much simpler than the previous example shown. &lt;br&gt;&lt;/br&gt; 
+[BiocContainers consortium](https://biocontainers.pro/) hosted by [quay](https://quay.io/search) means often only simple recipes are required.&lt;br&gt;&lt;/br&gt;
+BioContainers are often very compact (6Mb or less!)
+]
+]
+.pull-right[
+.small-code[
+
+```bash
+$ cat star_from_quay.2.7.0b.recipe
+Bootstrap: docker
+From: quay.io/biocontainers/star:2.7.0b--0
+
+%help
+Example:
+singularity run --bind /data:/data star --help
+
+%runscript
+exec STAR "${@}"
+
+%apprun standard
+exec STAR "${@}"
+
+%apprun long
+exec STARlong "${@}"
+```
+]
+]
+
+???
+
+TODO:
+
+Modularise a container
+---
+
+# Container to Module
+
+It would be nice if our user could just run the commands below.
+Since
++ Modules more common, no pipeline disruptions
++ User experience with singularity not required.&lt;br&gt;&lt;/br&gt;
+
+
+```bash
+module load star/2.7.0
+star --help
+```
+
+---
+
+# Container to Module
+
+We keep the module short and sweet as summarised below.
+We then write a bash wrapper to the bin path which wraps around the container script.
+
+See the template bash wrapper [here](https://gist.githubusercontent.com/alexiswl/6974927ab8da81f1e3dc2222db467486/raw/2ac3ea22e632408f972f557a367d1a67defb5530/templates_bash_wrapper.sh)
+
+
+```bash
+$ module show star/2.7.0
+-------------------------------------------------------------------
+$MODULEPATH/star/2.7.0:
+
+conflict         star
+prepend-path     PATH $CONTAINER_PATH/star/2.7.0/bin
+
+```
+
+---
+
+# Testing the installation
+
+
+```bash
+# Load module
+module load star/2.7.0
+# Run help script on module
+STAR --help
+# Try running help script through slurm
+srun --time=0-00:00:10 STAR --help
+```
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({

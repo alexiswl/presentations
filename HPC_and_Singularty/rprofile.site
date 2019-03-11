@@ -1,0 +1,17 @@
+# Set CRAN and BioC
+local({
+  
+  # Get standard repos
+  r <- getOption("repos")
+  # Get local CRAN mirror
+  r["CRAN"] <- "https://cran.ms.unimelb.edu.au"
+  
+  
+  # Add biocmanager repos
+  if ("BiocManager" %in% rownames(as.data.frame(utils::installed.packages()))){
+    r <- c(r, BiocManager::repositories())
+  }
+  
+  # Set to options
+  options(repos = r)
+})

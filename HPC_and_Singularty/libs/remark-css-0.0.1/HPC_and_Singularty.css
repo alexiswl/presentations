@@ -84,6 +84,9 @@ blockquote {
   font-size: 45%
 }
 
+.baby-code .remark-code{
+  font-size: 75%;
+}
 .small-code .remark-code{
   font-size: 55%;
 }
@@ -173,4 +176,6 @@ tr:nth-child(even) { background: #eee }
   display: none;
 }
 
+
+img[alt=gromit_gif] { width: 42%; }
 
