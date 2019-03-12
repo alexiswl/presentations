@@ -5,7 +5,7 @@ author: "Alexis Lucattini"
 date: "Wed 13th March 2019"
 output:
   xaringan::moon_reader:
-    css: "libs/remark-css-0.0.1/HPC_and_Singularty.css"
+    css: "libs/remark-css-0.0.1/HPC_and_Singularity.css"
     lib_dir: libs
     nature:
       highlightStyle: pygments
@@ -435,7 +435,7 @@ srun --time=0-00:00:10 STAR --help
 .baby-bear[
 + [Singularity Documentation](https://www.sylabs.io/guides/2.5/user-guide/index.html)<br></br>
 + [BioContainers](https://biocontainers.pro/)<br></br>
-+ [This Presentation in Markdown Format](./HPC_and_Singularty.html)<br></br>
++ [This Presentation in Markdown Format](./HPC_and_Singularity.html)<br></br>
 + [Vagrant Boxes for building containers locally](https://app.vagrantup.com/sylabs)<br></br>
 + [My Email Address](mailto:Alexis.Lucattini@agrf.org.au)<br></br>
 + [Module/Container Gist](https://gist.github.com/alexiswl/6974927ab8da81f1e3dc2222db467486)
