@@ -23,9 +23,11 @@ It will cover building from pre-built containers, installations via a recipe scr
   + **Environment independent**
     + Works for me, works for you.
     
-  + **Easily installation** 
+  + **Easily installation**
+    + No sudo permissions on HPC required!
   
-![](images/britney.jpg){width=250px}
+  + **Reduce conflicts between software**
+    + Pipeline saviour
     
 ## Which containers
   + Singularity > Docker
@@ -487,6 +489,10 @@ else
         eval ${COMMAND}
 fi
 ```
+
+# Reducing repetition
+See the following [gist]
+(https://gist.github.com/alexiswl/6974927ab8da81f1e3dc2222db467486) for generating bash wrappers, modules and singularity recipes from biocontainers with just a yaml file.
 
 # Testing an overall Installation
 ```{bash, eval=FALSE}

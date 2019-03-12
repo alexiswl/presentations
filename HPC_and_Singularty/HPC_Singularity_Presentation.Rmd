@@ -246,7 +246,7 @@ If this script fails for you, please see the next slide before panicking
 ???
 
 The R container is pretty good, but maybe we could give our users a bit of a head-start.   
-Using the %post section we’ll preinstall a few packages to get them going.
+Using the `%post` section we’ll preinstall a few packages to get them going.
 If this script fails for you, you've done good.
 
 ---
@@ -254,7 +254,7 @@ If this script fails for you, you've done good.
 # Adding files
 .baby-bear[
 No CRAN mirror specified?  
-No worries, we can add [one](rprofile.site) in using the %files section.
+No worries, we can add [one](rprofile.site) in using the `%files` section.
 ]
 
 .small-code[
@@ -289,12 +289,11 @@ Our container now runs R interactively,
 however, this may not suit the needs of everyone.
 
 * Apps allow users to specify what commands they wish to run.<br></br>
-* Apps can also have their own specific:
-  + %files
-  + %environment
-  + %post<br></br>
+* Apps can also have their own specific attributes:
+  + `%files` -> `%appfiles <app_name>`
+  + `%environment` -> `%appenv <app_name>`
+  + `%post` -> `%appinstall <app_name>`
 
-Just specify with the %app prefix and complete with the app name.
 ]
 
 ???
@@ -337,8 +336,8 @@ exec Rscript ${@}
 Singularity environments can be managed in three ways, with the hierachies as follows.
 
 * exporting variables with the `SINGULARITYENV_` prefix prior to running.
-* exporting variables in %post or %apppost
-* exporting in %environment or %appenvironment
+* exporting variables in `%post` or `%appinstall`
+* exporting in `%environment` or `%appenv`
 
 For examples, please visit the [docs](https://www.sylabs.io/guides/2.5/user-guide/environment_and_metadata.html)
 
@@ -414,6 +413,11 @@ prepend-path     PATH $CONTAINER_PATH/star/2.7.0/bin
 
 ---
 
+# Reducing repetition
+See the following [gist](https://gist.github.com/alexiswl/6974927ab8da81f1e3dc2222db467486) for generating bash wrappers, modules and singularity recipes from biocontainers with just a yaml file.
+
+---
+
 # Testing the installation
 
 ```{bash, eval=FALSE}
@@ -424,3 +428,15 @@ STAR --help
 # Try running help script through slurm
 srun --time=0-00:00:10 STAR --help
 ```
+
+---
+
+# References
+.baby-bear[
++ [Singularity Documentation](https://www.sylabs.io/guides/2.5/user-guide/index.html)<br></br>
++ [BioContainers](https://biocontainers.pro/)<br></br>
++ [This Presentation in Markdown Format](./HPC_and_Singlarty.html)<br></br>
++ [Vagrant Boxes for building containers locally](https://app.vagrantup.com/sylabs)<br></br>
++ [My Email Address](mailto:Alexis.Lucattini@agrf.org.au)<br></br>
++ [Module/Container Gist](https://gist.github.com/alexiswl/6974927ab8da81f1e3dc2222db467486)
+]

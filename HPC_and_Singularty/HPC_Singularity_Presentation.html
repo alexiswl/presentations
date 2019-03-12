@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
     <title>HPC and Singularity</title>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <meta name="author" content="Alexis Lucattini" />
     <link rel="stylesheet" href="libs\remark-css-0.0.1\HPC_and_Singularty.css" type="text/css" />
   </head>
@@ -146,7 +146,7 @@ Without using containers, one must ensure that all modules that may be loaded at
 ## DockerHub
 
 ```bash
-$ cat recipe.docker
+$ cat docker.recipe
 BootStrap: docker
 From: r-base:3.5.1
 
@@ -191,7 +191,7 @@ $ sudo singularity build \
 
 # Running the container
 
-With just those two lines we now have containers that can the R console!&lt;br&gt;&lt;/br&gt;
+With just those two lines we now have containers that can run the R console!&lt;br&gt;&lt;/br&gt;
 
 ```bash
 $ singularity run r_from_shub_3.5.2.simg
@@ -230,7 +230,7 @@ $ singularity shell r_from_shub_3.5.2.simg
 .small-code[
 
 ```bash
-$ cat recipe.singularity
+$ cat singularity_v2.recipe
 BootStrap: shub
 From: MPIB/singularity-r:3.5.1
 
@@ -256,7 +256,7 @@ If this script fails for you, please see the next slide before panicking
 ???
 
 The R container is pretty good, but maybe we could give our users a bit of a head-start.   
-Using the %post section we’ll preinstall a few packages to get them going.
+Using the `%post` section we’ll preinstall a few packages to get them going.
 If this script fails for you, you've done good.
 
 ---
@@ -264,13 +264,13 @@ If this script fails for you, you've done good.
 # Adding files
 .baby-bear[
 No CRAN mirror specified?  
-No worries, we can add [one](rprofile.site) in using the %files section.
+No worries, we can add [one](rprofile.site) in using the `%files` section.
 ]
 
 .small-code[
 
 ```bash
-$ cat recipe.singularity
+$ cat singularity_v3.recipe
 BootStrap: shub
 From: MPIB/singularity-r:3.5.1
 
@@ -289,7 +289,6 @@ Rscript --vanilla -e 'install.packages("tidyverse")'
 
 ???
 
-TODO: link to the rprofile file.
 
 ---
 
@@ -300,12 +299,11 @@ Our container now runs R interactively,
 however, this may not suit the needs of everyone.
 
 * Apps allow users to specify what commands they wish to run.&lt;br&gt;&lt;/br&gt;
-* Apps can also have their own specific:
-  + %files
-  + %environment
-  + %post&lt;br&gt;&lt;/br&gt;
+* Apps can also have their own specific attributes:
+  + `%files` -&gt; `%appfiles &lt;app_name&gt;`
+  + `%environment` -&gt; `%appenv &lt;app_name&gt;`
+  + `%post` -&gt; `%appinstall &lt;app_name&gt;`
 
-Just specify with the %app prefix and complete with the app name.
 ]
 
 ???
@@ -319,7 +317,7 @@ But say our user just needs the R platform, not the interactive suite? We could 
 .small-code[
 
 ```bash
-$ cat recipe.singularity
+$ cat singularity_v4.recipe
 BootStrap: shub
 From: MPIB/singularity-r:3.5.1
 
@@ -349,8 +347,8 @@ exec Rscript ${@}
 Singularity environments can be managed in three ways, with the hierachies as follows.
 
 * exporting variables with the `SINGULARITYENV_` prefix prior to running.
-* exporting variables in %post or %apppost
-* exporting in %environment or %appenvironment
+* exporting variables in `%post` or `%appinstall`
+* exporting in `%environment` or `%appenv`
 
 For examples, please visit the [docs](https://www.sylabs.io/guides/2.5/user-guide/environment_and_metadata.html)
 
@@ -392,9 +390,6 @@ exec STARlong "${@}"
 
 ???
 
-TODO:
-
-Modularise a container
 ---
 
 # Container to Module
@@ -432,6 +427,11 @@ prepend-path     PATH $CONTAINER_PATH/star/2.7.0/bin
 
 ---
 
+# Reducing repetition
+See the following [gist](https://gist.github.com/alexiswl/6974927ab8da81f1e3dc2222db467486) for generating bash wrappers, modules and singularity recipes from biocontainers with just a yaml file.
+
+---
+
 # Testing the installation
 
 
@@ -443,7 +443,20 @@ STAR --help
 # Try running help script through slurm
 srun --time=0-00:00:10 STAR --help
 ```
+
+---
+
+# References
+.baby-bear[
++ [Singularity Documentation](https://www.sylabs.io/guides/2.5/user-guide/index.html)&lt;br&gt;&lt;/br&gt;
++ [BioContainers](https://biocontainers.pro/)&lt;br&gt;&lt;/br&gt;
++ [This Presentation in Markdown Format](./HPC_and_Singlarty.html)&lt;br&gt;&lt;/br&gt;
++ [Vagrant Boxes for building containers locally](https://app.vagrantup.com/sylabs)&lt;br&gt;&lt;/br&gt;
++ [My Email Address](mailto:Alexis.Lucattini@agrf.org.au)&lt;br&gt;&lt;/br&gt;
++ [Module/Container Gist](https://gist.github.com/alexiswl/6974927ab8da81f1e3dc2222db467486)
+]
     </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "pygments",
@@ -453,16 +466,57 @@ srun --time=0-00:00:10 STAR --help
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
 });
-(function() {
-  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
   if (!r) return;
   s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
   d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
 })();</script>
 
 <script>
 (function() {
-  var i, text, code, codes = document.getElementsByTagName('code');
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
   for (i = 0; i < codes.length;) {
     code = codes[i];
     if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
@@ -476,7 +530,8 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     i++;
   }
-})();
+};
+slideshow._releaseMath(document);
 </script>
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
