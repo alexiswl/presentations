@@ -504,6 +504,79 @@ centrifuge --help
 srun --time=0-00:00:10 centrifuge --help
 ```
 
+# Locale woes
+You may get something like this during start-up of your script
+```{bash, eval=FALSE}
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C"
+2: Setting LC_COLLATE failed, using "C"
+3: Setting LC_TIME failed, using "C"
+4: Setting LC_MESSAGES failed, using "C"
+5: Setting LC_MONETARY failed, using "C"
+6: Setting LC_PAPER failed, using "C"
+7: Setting LC_MEASUREMENT failed, using "C"
+```
+
+This is a common issue for containers and unfortunately there is no one solution as
+its dependent on the base OS of the container.
+
+Never the less, below is a solution for Debian 9 containers.
+
+## How do I tell what my container is running
+Shell into your container and run:
+`cat /etc/os-release` or `cat /etc/lsb-release`.
+
+These files should provide information like the following:
+```{bash, eval=FALSE}
+PRETTY_NAME="Debian GNU/Linux 9 (stretch)"
+NAME="Debian GNU/Linux"
+VERSION_ID="9"
+VERSION="9 (stretch)"
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
+```
+
+## Adding locale files to your container
+Generate the following files, note there's a tab between the two values in the second file
+```{bash, eval=FALSE}
+$ cat locale.gen
+en_US.UTF-8 UTF-8
+$ cat locale.alias
+en_US   en_US.utf8
+```
+
+In your recipe add these files to a tmp place
+```{bash, eval=FALSE}
+%files
+# Move to final spot during %post
+locale.gen /etc/locale.gen.tmp
+locale.alias /etc/locale.alias.tmp
+```
+
+## Installing the locale module
+Then install the debconf and locales components, reconfigure locales,
+move and link to the following files in the %post component of your recipe.
+```{bash, eval=FALSE}
+%post
+# Install locales
+apt-get update
+apt-get install debconf locales -y
+dpkg-reconfigure locales
+# Move added files
+mv /etc/locale.gen.tmp /etc/locale.gen
+mv /etc/locale.alias.tmp /etc/locale.alias
+# Link to /usr/share/locale
+mkdir -p /usr/share/locale
+ln -sf /etc/locale.alias /usr/share/locale/locale.alias
+# Reset locales
+locale-gen
+```
+
+Rebuild the container without issue.
+
+
 # References
 
 + [Singularity Documentation](https://www.sylabs.io/guides/2.5/user-guide/index.html)<br></br>
@@ -511,4 +584,5 @@ srun --time=0-00:00:10 centrifuge --help
 + [This Document in Presentation Format](./HPC_Singularity_Presentation.html)<br></br>
 + [Vagrant Boxes for building containers locally](https://app.vagrantup.com/sylabs)<br></br>
 + [My Email Address](mailto:Alexis.Lucattini@agrf.org.au)<br></br>
-+ [Module/Container Gist](https://gist.github.com/alexiswl/6974927ab8da81f1e3dc2222db467486)
++ [Module/Container Gist](https://gist.github.com/alexiswl/6974927ab8da81f1e3dc2222db467486)<br></br>
++ [Debian Locales](https://people.debian.org/~schultmc/locales.html)

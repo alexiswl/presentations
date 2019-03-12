@@ -744,6 +744,64 @@ centrifuge --help
 # Try running help script through slurm
 srun --time=0-00:00:10 centrifuge --help</code></pre>
 </div>
+<div id="locale-woes" class="section level1">
+<h1>Locale woes</h1>
+<p>You may get something like this during start-up of your script</p>
+<pre class="bash"><code>During startup - Warning messages:
+1: Setting LC_CTYPE failed, using &quot;C&quot;
+2: Setting LC_COLLATE failed, using &quot;C&quot;
+3: Setting LC_TIME failed, using &quot;C&quot;
+4: Setting LC_MESSAGES failed, using &quot;C&quot;
+5: Setting LC_MONETARY failed, using &quot;C&quot;
+6: Setting LC_PAPER failed, using &quot;C&quot;
+7: Setting LC_MEASUREMENT failed, using &quot;C&quot;</code></pre>
+<p>This is a common issue for containers and unfortunately there is no one solution as its dependent on the base OS of the container.</p>
+<p>Never the less, below is a solution for Debian 9 containers.</p>
+<div id="how-do-i-tell-what-my-container-is-running" class="section level2">
+<h2>How do I tell what my container is running</h2>
+<p>Shell into your container and run: <code>cat /etc/os-release</code> or <code>cat /etc/lsb-release</code>.</p>
+<p>These files should provide information like the following:</p>
+<pre class="bash"><code>PRETTY_NAME=&quot;Debian GNU/Linux 9 (stretch)&quot;
+NAME=&quot;Debian GNU/Linux&quot;
+VERSION_ID=&quot;9&quot;
+VERSION=&quot;9 (stretch)&quot;
+ID=debian
+HOME_URL=&quot;https://www.debian.org/&quot;
+SUPPORT_URL=&quot;https://www.debian.org/support&quot;
+BUG_REPORT_URL=&quot;https://bugs.debian.org/&quot;</code></pre>
+</div>
+<div id="adding-locale-files-to-your-container" class="section level2">
+<h2>Adding locale files to your container</h2>
+<p>Generate the following files, note there’s a tab between the two values in the second file</p>
+<pre class="bash"><code>$ cat locale.gen
+en_US.UTF-8 UTF-8
+$ cat locale.alias
+en_US   en_US.utf8</code></pre>
+<p>In your recipe add these files to a tmp place</p>
+<pre class="bash"><code>%files
+# Move to final spot during %post
+locale.gen /etc/locale.gen.tmp
+locale.alias /etc/locale.alias.tmp</code></pre>
+</div>
+<div id="installing-the-locale-module" class="section level2">
+<h2>Installing the locale module</h2>
+<p>Then install the debconf and locales components, reconfigure locales, move and link to the following files in the %post component of your recipe.</p>
+<pre class="bash"><code>%post
+# Install locales
+apt-get update
+apt-get install debconf locales -y
+dpkg-reconfigure locales
+# Move added files
+mv /etc/locale.gen.tmp /etc/locale.gen
+mv /etc/locale.alias.tmp /etc/locale.alias
+# Link to /usr/share/locale
+mkdir -p /usr/share/locale
+ln -sf /etc/locale.alias /usr/share/locale/locale.alias
+# Reset locales
+locale-gen</code></pre>
+<p>Rebuild the container without issue.</p>
+</div>
+</div>
 <div id="references" class="section level1">
 <h1>References</h1>
 <ul>
@@ -752,7 +810,8 @@ srun --time=0-00:00:10 centrifuge --help</code></pre>
 <li><a href="./HPC_Singularity_Presentation.html">This Document in Presentation Format</a><br /></li>
 <li><a href="https://app.vagrantup.com/sylabs">Vagrant Boxes for building containers locally</a><br /></li>
 <li><a href="mailto:Alexis.Lucattini@agrf.org.au">My Email Address</a><br /></li>
-<li><a href="https://gist.github.com/alexiswl/6974927ab8da81f1e3dc2222db467486">Module/Container Gist</a></li>
+<li><a href="https://gist.github.com/alexiswl/6974927ab8da81f1e3dc2222db467486">Module/Container Gist</a><br /></li>
+<li><a href="https://people.debian.org/~schultmc/locales.html">Debian Locales</a></li>
 </ul>
 </div>
 
