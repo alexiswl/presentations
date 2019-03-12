@@ -7,7 +7,7 @@
 4. [Long, Lariat and Loupe, the ins and outs of the longranger pipeline - July 27th 2018 - WEHI](linked_reads/linked_reads.html)
 
 2019
-1. [Singularity On A HPC - Mar 12th 2019 - AGRF](HPC_and_Singularty/HPC_Singularity_Presentation.html)
+1. [Singularity On A HPC - Mar 12th 2019 - AGRF](HPC_and_Singularity/HPC_Singularity_Presentation.html)
 
 Tutorials (that have never officially been presented)
 1. [Vagrant Boxes for running and sharing VMs](Creating_A_Vagrant_Box/Creating_A_Vagrant_Box.html)

@@ -504,3 +504,11 @@ centrifuge --help
 srun --time=0-00:00:10 centrifuge --help
 ```
 
+# References
+
++ [Singularity Documentation](https://www.sylabs.io/guides/2.5/user-guide/index.html)<br></br>
++ [BioContainers](https://biocontainers.pro/)<br></br>
++ [This Document in Presentation Format](./HPC_Singularity_Presentation.html)<br></br>
++ [Vagrant Boxes for building containers locally](https://app.vagrantup.com/sylabs)<br></br>
++ [My Email Address](mailto:Alexis.Lucattini@agrf.org.au)<br></br>
++ [Module/Container Gist](https://gist.github.com/alexiswl/6974927ab8da81f1e3dc2222db467486)
