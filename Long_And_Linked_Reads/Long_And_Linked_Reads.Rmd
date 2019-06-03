@@ -1,0 +1,466 @@
+---
+title: "Long And Linked Reads"
+subtitle: ""
+
+author: "Alexis Lucattini"
+date: "Mon 10 Jun 2019"
+
+output:
+  xaringan::moon_reader:
+    css: "libs/remark-css-0.0.1/Long_And_Linked_Reads.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: pygments
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+## Bioinformatics is a bottleneck
+* Novel file types (multi-fast5s PromethION), unaligned BAMS
+
+* Few ways to do one thing, benchmarking needed.
+
+* Getting help and resources, community in development.
+
+* Denovo assemblies have always been really hard.
+
+* Portable bioinformatics is difficult.
+
+???
+
+CAN BE BOTH NANOPORE AND PACBIO
+
+---
+
+## New methods for standard tasks
+.pull-left[
+.baby-bear[
+**Basecalling**
+* Not bcl2fastq.
+
+**Data QC**
+* Read length, yields, read quality
+* Fastq *indicitive* of read quality.
+]
+]
+.pull-right[
+.baby-bear[
+**Adapter trimming**
+* Nanopore reads have adapters too.
+
+**Alignment**
+* Different parameter settings required.
+]
+]
+
+???
+
+CAN BE BOTH NANOPORE AND PACBIO
+
+---
+
+## Basecalling methods
+### GPU & CPU.
+* GPUs much faster. .small[Guppy 1.8.3 is the current basecalling version]
+
+* Different algorithms give slightly different results.
+
+* .small[Check out Ryan Wick's [base-calling comparison repo](https://github.com/rrwick/Basecalling-comparison)]
+
+
+???
+
+---
+
+PROMETHION SPECIFIC
+
+## Nanopore Sequencing - PMI
+
+.pull-left[
+**Technical**
+* Very long sequencing reads
+* Single-molecule
+* Real-time
+* Portable
+* Low accuracy
+* Lower yields
+]
+.pull-right[
+**Financial**
+* Minimal start-up cost
+* Cheap for small uses of data
+* Relatively expensive per base
+]
+
+---
+
+## AGRF PromethION in focus
+
+Kit-9, sample sensitive, great N50!
+
+.pull-left[
+<img src=./images/example.yield.png width=80%>
+]
+.pull-right[
+<img src=./images/example.weighted.hist.png width=80%>
+]
+
+---
+
+## WUB
+* Software package repository from ONT.
+* Similar to pysam API.
+* Handy plotting tools.
+
+.pull-left[
+[GitHub](https://www.github.com/nanoporetech/wub)
+]
+.pull-right[
+[Docs](https://wub.readthedocs.io/en/latest/)
+]
+
+---
+
+## WUB cont.
+
+.pull-left[
+<img src=./images/basestats.png width=100%>
+]
+.pull-right[
+<img src=./images/per_read_accuracies.png width=100%>
+
+]
+
+---
+
+## NanoPlot
+
+.pull-left[
+.baby-bear[
+* Plot run metrics for a MinION run
+* [Repo on GitHub](https://github.com/wdecoster/NanoPlot)
+* Also see 
+  + NanoComp
+  + NanoStat
+  + NanoFilt
+  + NanoLyse
+]
+]
+
+.pull-right[
+<img src="https://github.com/wdecoster/NanoPlot/raw/master/examples/scaled_MappingQualityvsAverageBaseQuality_kde.png" width="100%">
+]
+
+---
+
+## Porechop, Filtlong, Unicycler
+
+Ryan Wick's repos set for:
+* [Demultiplexing / Trimming Adapters](https://github.com/rrwick/porechop)
+* [Removing poor quality reads](https://github.com/rrwick/filtlong)
+* [Generating Circular-hybrid assemblies](https://github.com/rrwick/unicycler)
+
+---
+
+# Minimap2
+
+* Current gold-standard aligner for ONT data.
+* Make sure the index is an 'ont-index' when generating index.
+* Alignments come with CS-string.
+
+.pull-left[
+[GitHub](https://github.com/lh3/minimap2)
+]
+.pull-right[
+[GitHub Guide](https://github.com/lh3/minimap2#users-guide)
+]
+
+???
+
+CAN BE BOth PROMETHION AND PACBIO
+
+---
+
+# The CS tag and MD tag
+.pull-left[
+.baby-bear[
+* CS tag - verbose version of MD tag
+  + Easier for parsing.
+  + Relatively new.
+  + MD tag still required for some parsers.
+    + Pipe through `samtools calmd` prior to sorting.
+]
+]
+.pull-right[
+.baby-bear[
+* CS tag example:
+  + `:6-ata:10+gtc:4*at:3`
+  + `:[0-9]+ is an identical block`
+  + '-[ACTG]+ is a deletion`
+  + '+[ACTG]+ is an insersion
+  + '*XY' is a substitution with base X subsituted for base y.
+]
+]
+
+???
+
+CAN BE BOTH PROMETHION AND PACBIO
+
+---
+
+# Nanopolish
+
+Jared T. Simpson's [nanopolish](https://github.com/jts/nanopolish) uses signal-level (fast5) data to:
+* Detecting methylation
+* Calling SNP level variants
+* Polishing genomes
+
+---
+
+# Tombo
+
+**ONT's methylation caller.**
+
+* Provides output of regions of significance
+* Can be captured as a 'wiggle' file to be viewed in a genome browser.
+
+.pull-left[
+[GitHub](https://github.com/nanoporetech/tombo)
+]
+.pull-right[
+[Docs](https://nanoporetech.github.io/tombo/tutorials.html)
+]
+
+---
+
+
+## Haplotyping-methylation combo
+
+.center[
+<img src="images/scott_paper_methylation_differences.png" width="55%">
+]
+
+.pull-left[
+[BioRxiv Paper](https://www.biorxiv.org/content/early/2018/10/17/445924)
+]
+.pull-right[
+[Scott's GitHub Haplotype-Methylome Repo](https://github.com/scottgigante/haplotyped-methylome)
+]
+???
+Mention of scott's paper, github and methylation paper
+todo: provide details of scott's pipeline.
+
+---
+
+## Some tutorial references
+
+[Tim Kahlke - Toast 2018](https://github.com/timkahlke/toast2018)  
+VM based tutorial. Covers QC to methylation to assembly.
+
+
+[Hadrien Gourle](https://github.com/HadrienG/tutorials/blob/master/docs/nanopore.md)  
+Simple fastq to assembly notebook.
+
+
+### Another visual introduction to linked-reads:
+
+.small[Because you can never watch this video too many times]
+.center[<a href="https://10xgenomics.wistia.com/medias/2r0nal3n3j"><img src=./images/intro_video_thumbnail.png width=68%>]
+
+???
+
+Things to note:
+
+The GEMs, 14 bp barcodes, and molecular tags.
+
+Add linked reads video here.
+https://10xgenomics.wistia.com/medias/2r0nal3n3j
+
+70s in.
+
+---
+
+# A Micro-Glossary
+
+* Barcode
+  + .small[A unique set of 14 nucleotides.]
+* Molecule:
+  + .small[The ~50Kb input molecule into the 10X system.]
+* Read:
+  + .small[~200 bp containing genomic information and a barcode.]
+* GEM:
+  + .small[A single droplet containing identical barcodes.]
+  + .small[Approximately 10 molecules exist inside per GEM.]
+
+---
+
+# The Longranger pipeline.
+
+.center[<img src=./images/10X_DIAGRAM.png width=50%>]
+
+???
+
+An important note is that the bcl2fastq stage is separate from the standard illumina bcl2fastq.
+The longranger mkfastq is essentially a wrapper aroudn bcl2fastq with a couple of tinkerings.
+
+You then have the option of 'basic, align or wgs from fastq', each with cumulative benefits.
+You may wish to use these two on the left for running alternative analysis callers not menitoned today. 
+
+---
+
+## Longranger mkfastq
+.pull-left[
+.baby-bear[
+* Wrapper of bcl2fastq
+* Input
+  + Requires input and output directories
+  + A samplesheet
+  + A base-mask parameter.
+* Output
+  + Fastq files split by 10X kit ID .tiny[(SI-GA-01)]
+    + Barcode/Index QC Values.
+    + GEM estimates
+]]
+.pull-right[
+*  `*_L1.fastq.gz` contains the i7 index
+*  `*_R1.fastq.gz` contains the fastq information. <br><br>
+<img src=./images/index_orientation.png width=130%>
+]
+
+???
+
+---
+
+# Longranger align
+BWA + 10X Lariat aligner
+.pull-left[
+.baby-bear[
+* Input:
+  + Fastq.<br><br>
+* Run time:
+ + 24 hours.<br><br>
+* Output:
+ + Aligned BAM
+ + Alignment QC stats
+]
+]
+.pull-right[
+Output bam tags:
+.baby-bear[
+* AS - Primary Alignment Score
+* XS - Secondary Alignment Score
+* To be cont..
+]
+]
+
+???
+
+Takes about a day, what bam tag outputs are provided.
+First pass alignment with BWA.
+Second pass with the 10X lariat aligner.
+
+---
+
+# Lariat Aligner
+
+Extra alignment help, keeps both primary and secondary alignments alongside information of the GEM tag to:
+1. Boost confidence in the alignment score (AM)
+2. Use alignments with the same molecular tag to align to  repeat regions (XS)
+3. Overcome tandem duplications using GEM tag of secondary alignments (XT)
+
+???
+
+AM tag: Increase the alignment score if the alignment is in a long molecule.
+XS: Did the aligner need assistance in flanking regions to align
+XT: Mark tandem duplications.
+
+---
+
+# Longranger wgs
+Obtain SNP calling .small[(GATK)], phasing and SV information
+
+* Input: 
+ + Fastq.
+* ~ Run time: 
+ + Three days .small[w. 250GB RAM and 16 cores]
+* Output:
+ + .small[List of structural variants in .bed format.]
+ + .small[BAM files with additional haplotype phasing tags.]
+ + .small[.loupe file.]
+
+???
+
+---
+
+# The Loupe file
+
+.pull-left[
+~ 5Gb file.  
+Contains alignment information across the entire genome.
+
+]
+.pull-right[
+<img src=./images/full_sv_view.png width=110%>
+]
+
+???
+
+Similar to an IGV
+
+---
+
+# Viewing your loupe-file
+
+Live Demonstration on a HPC.
+
+Steps:
+1. Allocate a node (be greedy)
+2. Copy all your .loupe files to a local space on the HPC node.
+3. Start the loupe application.
+4. ssh in (with binding) into that node.
+
+All code in the comments (press p)
+
+???
+
+Homozygous deletion:
+chr3:129,663,385-129,863,385
+
+Heterozygous deletion:
+chr1:152,355,549-152,755,549
+check the linked reads tab as well for this one.
+
+Duplication:
+chr16:34,080,000-34,880,000;chr16:34,230,000-35,030,000
+chr6:0-626,484;chr6:0-626,484
+
+Homo INV:
+chr12:17,723,137-18,123,137;chr12:17,813,072-18,213,072
+`ssh username@headnode`
+`screen`
+`srun --mem=100G --time=2-0 --pty bash`
+`export LOUPE_SERVER=/path/to/loupe files`
+`start-loupe.sh`
+
+`ssh -L3000:127.0.0.1:3000 username@workernode`
+
+---
+
+# List of 10X resources used today
+
+.pull-left[
+Miscellaneous:
+*  [ssh-bind ports](https://help.ubuntu.com/community/SSH/OpenSSH/PortForwarding)
+*  [screen](https://www.rackaid.com/blog/linux-screen-tutorial-and-how-to)
+*  [slurm](https://slurm.schedmd.com/quickstart.html)
+]
+
+.pull-right[
+10X related resources
+[10X video](https://10xgenomics.wistia.com/medias/2r0nal3n3j)
+[10X BAM Tags](https://support.10xgenomics.com/genome-exome/software/pipelines/latest/output/bam)
+[Loupe downloader](https://support.10xgenomics.com/genome-exome/software/downloads/latest)
+[NA12878 10X download](https://support.10xgenomics.com/genome-exome/datasets/2.2.1/NA12878_WGS_v2)
+]
+
+---
