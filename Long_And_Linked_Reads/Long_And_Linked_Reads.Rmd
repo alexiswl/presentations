@@ -1,6 +1,6 @@
 ---
-title: "Long And Linked Reads"
-subtitle: ""
+title: "Beyond Short Read Sequencing"
+subtitle: "Applications of Long and Linked Read"
 
 author: "Alexis Lucattini"
 date: "Mon 10 Jun 2019"
@@ -15,20 +15,63 @@ output:
       countIncrementalSlides: false
 ---
 
-## Bioinformatics is a bottleneck
-* Novel file types (multi-fast5s PromethION), unaligned BAMS
+## Beyond Short Reads
 
-* Few ways to do one thing, benchmarking needed.
+.pull-left[
+.large[Benefits]
+* Long-range haplotyping.
+* Methylation with single-molecule level sequencing.
+* Scaffolding and genome assembly
+* Resolving of large structural variations
+]
 
-* Getting help and resources, community in development.
+.pull-right[
+.large[Platforms]
+* ONT
+* PacBio
+* 10X
+]
 
-* Denovo assemblies have always been really hard.
-
-* Portable bioinformatics is difficult.
 
 ???
 
-CAN BE BOTH NANOPORE AND PACBIO
+Notes:
+What are the benefits of long reads.
+With short read sequencing, haplotyping information can be conveyed as long as there's no homogeneity for 300 bps. This often means that a SNP on one exon cannot be determined to be linked to a SNP on another exon for a given individual.
+Both ONT and PacBio offer single-molecule sequencing, the DNA is not amplified prior to entering the flowcell meaning additional modifications such as methylation can be detected with high coverage.
+More commonly long-reads are known for resolving scaffolds for genome assembly. Short-reads simply cannot overcome repeat regions longer than their read-length.
+
+# ALL TODOS
+PACBIO TOOLS -
+HOW DOES THE PACBIO WORK?
+GENOME ASSEMBLIES
+STRUCUTURAL VARIATION TOOLS
+ONT AND PACBIO DATASETS
+VAGRANT VM
+
+---
+
+## Bioinformatics is a bottleneck
+* Novel file types 
+  + multi-fast5s
+  + unaligned BAMS
+  + overly complicated BAMs.
+
+* Many ways to do one thing, benchmarking needed.
+
+* Getting help and resources, community still in development.
+
+* Denovo assemblies have always been really hard.
+
+???
+
+Class: ALL
+
+Notes:
+
+Bioinformatics seems to be a bit of an afterthought.
+Raw data off each of the machines comes in a different format, meaning bioinformatics algorithms often need to be built from the ground up.
+Denovo assemblies will remain really hard as labs try to complete tasks in the most cost-efficient way.
 
 ---
 
@@ -36,7 +79,8 @@ CAN BE BOTH NANOPORE AND PACBIO
 .pull-left[
 .baby-bear[
 **Basecalling**
-* Not bcl2fastq.
+* Signal to Base
+* Local alignments
 
 **Data QC**
 * Read length, yields, read quality
@@ -47,6 +91,7 @@ CAN BE BOTH NANOPORE AND PACBIO
 .baby-bear[
 **Adapter trimming**
 * Nanopore reads have adapters too.
+* PacBio reads can be one sequence repeated many times.
 
 **Alignment**
 * Different parameter settings required.
@@ -55,117 +100,18 @@ CAN BE BOTH NANOPORE AND PACBIO
 
 ???
 
-CAN BE BOTH NANOPORE AND PACBIO
+Class: ONT, PacBio
 
----
+Notes: 
 
-## Basecalling methods
-### GPU & CPU.
-* GPUs much faster. .small[Guppy 1.8.3 is the current basecalling version]
-
-* Different algorithms give slightly different results.
-
-* .small[Check out Ryan Wick's [base-calling comparison repo](https://github.com/rrwick/Basecalling-comparison)]
-
-
-???
-
----
-
-PROMETHION SPECIFIC
-
-## Nanopore Sequencing - PMI
-
-.pull-left[
-**Technical**
-* Very long sequencing reads
-* Single-molecule
-* Real-time
-* Portable
-* Low accuracy
-* Lower yields
-]
-.pull-right[
-**Financial**
-* Minimal start-up cost
-* Cheap for small uses of data
-* Relatively expensive per base
-]
-
----
-
-## AGRF PromethION in focus
-
-Kit-9, sample sensitive, great N50!
-
-.pull-left[
-<img src=./images/example.yield.png width=80%>
-]
-.pull-right[
-<img src=./images/example.weighted.hist.png width=80%>
-]
-
----
-
-## WUB
-* Software package repository from ONT.
-* Similar to pysam API.
-* Handy plotting tools.
-
-.pull-left[
-[GitHub](https://www.github.com/nanoporetech/wub)
-]
-.pull-right[
-[Docs](https://wub.readthedocs.io/en/latest/)
-]
-
----
-
-## WUB cont.
-
-.pull-left[
-<img src=./images/basestats.png width=100%>
-]
-.pull-right[
-<img src=./images/per_read_accuracies.png width=100%>
-
-]
-
----
-
-## NanoPlot
-
-.pull-left[
-.baby-bear[
-* Plot run metrics for a MinION run
-* [Repo on GitHub](https://github.com/wdecoster/NanoPlot)
-* Also see 
-  + NanoComp
-  + NanoStat
-  + NanoFilt
-  + NanoLyse
-]
-]
-
-.pull-right[
-<img src="https://github.com/wdecoster/NanoPlot/raw/master/examples/scaled_MappingQualityvsAverageBaseQuality_kde.png" width="100%">
-]
-
----
-
-## Porechop, Filtlong, Unicycler
-
-Ryan Wick's repos set for:
-* [Demultiplexing / Trimming Adapters](https://github.com/rrwick/porechop)
-* [Removing poor quality reads](https://github.com/rrwick/filtlong)
-* [Generating Circular-hybrid assemblies](https://github.com/rrwick/unicycler)
+While the standard fastq format is still used, getting to fastqs is not trivial. For ONT, this involves running digital signal data through an RNN to convert into sequencing values. QC values are no longer using interop files or Q30 scores, but we want to look at read length, the yield of the data and the sequencing quality, which can be much more varied when using long-read sequencing platforms.
 
 ---
 
 # Minimap2
 
-* Current gold-standard aligner for ONT data.
-* Make sure the index is an 'ont-index' when generating index.
+* Current gold-standard aligner for ONT and PacBio genomic data.
+* Make sure the index is an 'ont-index' or 'pacbio-index' when generating an index file.
 * Alignments come with CS-string.
 
 .pull-left[
@@ -208,12 +154,127 @@ CAN BE BOTH PROMETHION AND PACBIO
 
 ---
 
+## Nanopore Sequencing - PMI
+
+.pull-left[
+**Technical**
+* Very long sequencing reads
+* Single-molecule
+* Real-time
+* Portable
+* Low accuracy
+* Lower yields
+]
+.pull-right[
+**Financial**
+* Minimal start-up cost
+* Cheap for small uses of data
+* Relatively expensive per base
+]
+
+# TODO
+
+Place ONT VIDEO in here
+
+---
+
+## Basecalling methods
+### GPU & CPU.
+* GPUs much faster. .small[Guppy 1.8.3 is the current basecalling version]
+
+* Different algorithms give slightly different results.
+
+* .small[Check out Ryan Wick's [base-calling comparison repo](https://github.com/rrwick/Basecalling-comparison)]
+
+
+???
+
+PROMETHION SPECIFIC
+
+---
+
+## WUB
+* Software package repository from ONT.
+* Similar to pysam API.
+* Handy plotting tools.
+
+.pull-left[
+[GitHub](https://www.github.com/nanoporetech/wub)
+]
+.pull-right[
+[Docs](https://wub.readthedocs.io/en/latest/)
+]
+
+???
+
+NANOPORE SPECIFIC
+
+---
+
+## WUB cont.
+
+.pull-left[
+<img src=./images/basestats.png width=100%>
+]
+.pull-right[
+<img src=./images/per_read_accuracies.png width=100%>
+
+]
+
+???
+
+NANOPORE SPECIFIC
+
+
+---
+
+## NanoPlot
+
+.pull-left[
+.baby-bear[
+* Plot run metrics for a MinION run
+* [Repo on GitHub](https://github.com/wdecoster/NanoPlot)
+* Also see 
+  + NanoComp
+  + NanoStat
+  + NanoFilt
+  + NanoLyse
+]
+]
+
+.pull-right[
+<img src="https://github.com/wdecoster/NanoPlot/raw/master/examples/scaled_MappingQualityvsAverageBaseQuality_kde.png" width="100%">
+]
+
+???
+
+NANOPORE SPECIFIC
+
+---
+
+## Porechop, Filtlong, Unicycler
+
+Ryan Wick's repos set for:
+* [Demultiplexing / Trimming Adapters](https://github.com/rrwick/porechop)
+* [Removing poor quality reads](https://github.com/rrwick/filtlong)
+* [Generating Circular-hybrid assemblies](https://github.com/rrwick/unicycler)
+
+???
+
+NANOPORE SPECIFIC
+
+---
+
 # Nanopolish
 
 Jared T. Simpson's [nanopolish](https://github.com/jts/nanopolish) uses signal-level (fast5) data to:
 * Detecting methylation
 * Calling SNP level variants
 * Polishing genomes
+
+???
+
+NANOPORE SPECIFIC
 
 ---
 
@@ -231,6 +292,11 @@ Jared T. Simpson's [nanopolish](https://github.com/jts/nanopolish) uses signal-l
 [Docs](https://nanoporetech.github.io/tombo/tutorials.html)
 ]
 
+
+???
+
+NANOPORE SPECIFIC
+
 ---
 
 
@@ -246,9 +312,23 @@ Jared T. Simpson's [nanopolish](https://github.com/jts/nanopolish) uses signal-l
 .pull-right[
 [Scott's GitHub Haplotype-Methylome Repo](https://github.com/scottgigante/haplotyped-methylome)
 ]
+
 ???
-Mention of scott's paper, github and methylation paper
-todo: provide details of scott's pipeline.
+
+NANOPORE SPECIFIC
+
+---
+
+## AGRF PromethION in focus
+
+Kit-9, sample sensitive, great N50!
+
+.pull-left[
+<img src=./images/example.yield.png width=80%>
+]
+.pull-right[
+<img src=./images/example.weighted.hist.png width=80%>
+]
 
 ---
 
@@ -261,6 +341,31 @@ VM based tutorial. Covers QC to methylation to assembly.
 [Hadrien Gourle](https://github.com/HadrienG/tutorials/blob/master/docs/nanopore.md)  
 Simple fastq to assembly notebook.
 
+???
+
+NANOPORE SPECIFIC
+
+---
+
+# Pacific Biosciences
+
+???
+
+# TODO
+ADD https://www.youtube.com/watch?v=WMZmG00uhwU&feature=youtu.be to link
+Add image https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&ved=2ahUKEwiMqM-Z5c_iAhVCVH0KHUsACRsQjRx6BAgBEAU&url=https%3A%2F%2Fgithub.com%2Fben-lerch%2FCCS-3.0%2Fblob%2Fmaster%2FREADME.md&psig=AOvVaw1pDeCoQNzBw6_3pbCJqCIc&ust=1559736446254122
+
+
+
+---
+
+### Linked Reads
+
+Benefits of short-reads.
+Many reads, highly accurate.
+Molecular barcodes enable linking spatial information of reads.
+
+---
 
 ### Another visual introduction to linked-reads:
 
@@ -268,6 +373,8 @@ Simple fastq to assembly notebook.
 .center[<a href="https://10xgenomics.wistia.com/medias/2r0nal3n3j"><img src=./images/intro_video_thumbnail.png width=68%>]
 
 ???
+
+LINKED READS SPECIFIC
 
 Things to note:
 
@@ -292,6 +399,10 @@ https://10xgenomics.wistia.com/medias/2r0nal3n3j
   + .small[A single droplet containing identical barcodes.]
   + .small[Approximately 10 molecules exist inside per GEM.]
 
+???
+
+LINKED READS SPECIFIC
+
 ---
 
 # The Longranger pipeline.
@@ -305,6 +416,8 @@ The longranger mkfastq is essentially a wrapper aroudn bcl2fastq with a couple o
 
 You then have the option of 'basic, align or wgs from fastq', each with cumulative benefits.
 You may wish to use these two on the left for running alternative analysis callers not menitoned today. 
+
+LINKED READS SPECIFIC
 
 ---
 
@@ -328,6 +441,9 @@ You may wish to use these two on the left for running alternative analysis calle
 ]
 
 ???
+
+LINEKD READS SPECFIC
+Fastq files \_L1 \_R1 with the fastq information
 
 ---
 
@@ -355,6 +471,7 @@ Output bam tags:
 
 ???
 
+LINKED READS SPECIFIC
 Takes about a day, what bam tag outputs are provided.
 First pass alignment with BWA.
 Second pass with the 10X lariat aligner.
@@ -374,6 +491,8 @@ AM tag: Increase the alignment score if the alignment is in a long molecule.
 XS: Did the aligner need assistance in flanking regions to align
 XT: Mark tandem duplications.
 
+LINKED READS SPECIFIC
+
 ---
 
 # Longranger wgs
@@ -389,6 +508,8 @@ Obtain SNP calling .small[(GATK)], phasing and SV information
  + .small[.loupe file.]
 
 ???
+
+LINKED READS SPECIFIC
 
 ---
 
