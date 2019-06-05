@@ -29,7 +29,7 @@ output:
 .large[Platforms]
 * ONT
 * PacBio
-* 10X
+* 10X*
 ]
 
 
@@ -54,8 +54,7 @@ VAGRANT VM
 ## Bioinformatics is a bottleneck
 * Novel file types 
   + multi-fast5s
-  + unaligned BAMS
-  + overly complicated BAMs.
+  + unaligned BAMs
 
 * Many ways to do one thing, benchmarking needed.
 
@@ -151,6 +150,8 @@ CAN BE BOth PROMETHION AND PACBIO
 ???
 
 CAN BE BOTH PROMETHION AND PACBIO
+
+TODO Add in slide with minimap2 and nglmr
 
 ---
 
@@ -355,6 +356,10 @@ NANOPORE SPECIFIC
 ADD https://www.youtube.com/watch?v=WMZmG00uhwU&feature=youtu.be to link
 Add image https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&ved=2ahUKEwiMqM-Z5c_iAhVCVH0KHUsACRsQjRx6BAgBEAU&url=https%3A%2F%2Fgithub.com%2Fben-lerch%2FCCS-3.0%2Fblob%2Fmaster%2FREADME.md&psig=AOvVaw1pDeCoQNzBw6_3pbCJqCIc&ust=1559736446254122
 
+---
+
+# Subread vs CCS Read 
+
 
 
 ---
@@ -364,7 +369,9 @@ Add image https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&ved=
 Benefits of short-reads.
 Many reads, highly accurate.
 Molecular barcodes enable linking spatial information of reads.
+???
 
+TODO THIS IS FOR CANBERRA
 ---
 
 ### Another visual introduction to linked-reads:
