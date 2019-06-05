@@ -1,6 +1,6 @@
 ---
 title: "Beyond Short Read Sequencing"
-subtitle: "Applications of Long and Linked Read"
+subtitle: "Applications of Long Reads"
 
 author: "Alexis Lucattini"
 date: "Mon 10 Jun 2019"
@@ -149,9 +149,12 @@ CAN BE BOth PROMETHION AND PACBIO
 
 ???
 
+Minimap2 is the standard aligner for ONT and PacBio genomic data.
+It's extremely fast and has some useful output.
+
 CAN BE BOTH PROMETHION AND PACBIO
 
-TODO Add in slide with minimap2 and nglmr
+MAYBE TODO Add in slide with minimap2 and nglmr
 
 ---
 
@@ -346,11 +349,16 @@ Simple fastq to assembly notebook.
 
 NANOPORE SPECIFIC
 
+
 ---
 
 # Pacific Biosciences
 
+ 
+
 ???
+
+Greater maturity in bioinformatics components. Much of what needs to be done can be done via the smrtlink.
 
 # TODO
 ADD https://www.youtube.com/watch?v=WMZmG00uhwU&feature=youtu.be to link
@@ -358,237 +366,73 @@ Add image https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&ved=
 
 ---
 
+# Introduction to SMRTLINK
+
+Bioinformatics at a click-of-a-button.
+
+???
+
+Our SMRT-LINK runs on a singularity container, an is an on-demand device.
+
+
+
+---
+
 # Subread vs CCS Read 
 
 
 
----
-
-### Linked Reads
-
-Benefits of short-reads.
-Many reads, highly accurate.
-Molecular barcodes enable linking spatial information of reads.
 ???
 
-TODO THIS IS FOR CANBERRA
----
+The subread contains the smrtbell adapters, converting re-sequenced reads into a concensus single read. 
+This increases the accuracy in the read with every additional cycle. Often with genomic DNA, only one cycle is completed. There exists a trade-off between accuracy and length.
 
-### Another visual introduction to linked-reads:
+Lima is a PacBio developed algorithm for converting subreads into concensus reads.
 
-.small[Because you can never watch this video too many times]
-.center[<a href="https://10xgenomics.wistia.com/medias/2r0nal3n3j"><img src=./images/intro_video_thumbnail.png width=68%>]
+https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&ved=2ahUKEwjV6anVoNLiAhWPeisKHayrDEYQjRx6BAgBEAU&url=http%3A%2F%2Ffiles.pacb.com%2Fsoftware%2Fsmrtanalysis%2F2.2.0%2Fdoc%2Fsmrtportal%2Fhelp%2F!SSL!%2FWebhelp%2FPortal_PacBio_Glossary.htm&psig=AOvVaw1PQHML_fwy1Bc8i-c0ekeN&ust=1559821129992274
 
-???
-
-LINKED READS SPECIFIC
-
-Things to note:
-
-The GEMs, 14 bp barcodes, and molecular tags.
-
-Add linked reads video here.
-https://10xgenomics.wistia.com/medias/2r0nal3n3j
-
-70s in.
+Or
+https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&ved=2ahUKEwj6st7foNLiAhVTfH0KHbhKCBkQjRx6BAgBEAU&url=http%3A%2F%2Ffiles.pacb.com%2Fsoftware%2Fsmrtanalysis%2F2.2.0%2Fdoc%2Fsmrtportal%2Fhelp%2F!SSL!%2FWebhelp%2FPortal_PacBio_Glossary.htm&psig=AOvVaw1PQHML_fwy1Bc8i-c0ekeN&ust=1559821129992274
 
 ---
 
-# A Micro-Glossary
-
-* Barcode
-  + .small[A unique set of 14 nucleotides.]
-* Molecule:
-  + .small[The ~50Kb input molecule into the 10X system.]
-* Read:
-  + .small[~200 bp containing genomic information and a barcode.]
-* GEM:
-  + .small[A single droplet containing identical barcodes.]
-  + .small[Approximately 10 molecules exist inside per GEM.]
+# PacBio IsoSeq
 
 ???
 
-LINKED READS SPECIFIC
+Utilisation of CCS, full-length transcriptome.
 
 ---
 
-# The Longranger pipeline.
-
-.center[<img src=./images/10X_DIAGRAM.png width=50%>]
+# SV Calling with PacBio
 
 ???
 
-An important note is that the bcl2fastq stage is separate from the standard illumina bcl2fastq.
-The longranger mkfastq is essentially a wrapper aroudn bcl2fastq with a couple of tinkerings.
+https://www.pacb.com/products-and-services/analytical-software/whole-genome-sequencing/
+https://github.com/fritzsedlazeck/Sniffles
 
-You then have the option of 'basic, align or wgs from fastq', each with cumulative benefits.
-You may wish to use these two on the left for running alternative analysis callers not menitoned today. 
+https://github.com/EichlerLab/smrtsv2
 
-LINKED READS SPECIFIC
 
 ---
 
-## Longranger mkfastq
-.pull-left[
-.baby-bear[
-* Wrapper of bcl2fastq
-* Input
-  + Requires input and output directories
-  + A samplesheet
-  + A base-mask parameter.
-* Output
-  + Fastq files split by 10X kit ID .tiny[(SI-GA-01)]
-    + Barcode/Index QC Values.
-    + GEM estimates
-]]
-.pull-right[
-*  `*_L1.fastq.gz` contains the i7 index
-*  `*_R1.fastq.gz` contains the fastq information. <br><br>
-<img src=./images/index_orientation.png width=130%>
-]
+# Denovo Assembly Algorithms
+
+---
+
+# Final Remarks.
 
 ???
 
-LINEKD READS SPECFIC
-Fastq files \_L1 \_R1 with the fastq information
+Not a one-size fits all approach.
+Yield vs accuracy trade-off.
 
 ---
 
-# Longranger align
-BWA + 10X Lariat aligner
-.pull-left[
-.baby-bear[
-* Input:
-  + Fastq.<br><br>
-* Run time:
- + 24 hours.<br><br>
-* Output:
- + Aligned BAM
- + Alignment QC stats
-]
-]
-.pull-right[
-Output bam tags:
-.baby-bear[
-* AS - Primary Alignment Score
-* XS - Secondary Alignment Score
-* To be cont..
-]
-]
+# Other things that may interest you
 
 ???
 
-LINKED READS SPECIFIC
-Takes about a day, what bam tag outputs are provided.
-First pass alignment with BWA.
-Second pass with the 10X lariat aligner.
 
----
-
-# Lariat Aligner
-
-Extra alignment help, keeps both primary and secondary alignments alongside information of the GEM tag to:
-1. Boost confidence in the alignment score (AM)
-2. Use alignments with the same molecular tag to align to  repeat regions (XS)
-3. Overcome tandem duplications using GEM tag of secondary alignments (XT)
-
-???
-
-AM tag: Increase the alignment score if the alignment is in a long molecule.
-XS: Did the aligner need assistance in flanking regions to align
-XT: Mark tandem duplications.
-
-LINKED READS SPECIFIC
-
----
-
-# Longranger wgs
-Obtain SNP calling .small[(GATK)], phasing and SV information
-
-* Input: 
- + Fastq.
-* ~ Run time: 
- + Three days .small[w. 250GB RAM and 16 cores]
-* Output:
- + .small[List of structural variants in .bed format.]
- + .small[BAM files with additional haplotype phasing tags.]
- + .small[.loupe file.]
-
-???
-
-LINKED READS SPECIFIC
-
----
-
-# The Loupe file
-
-.pull-left[
-~ 5Gb file.  
-Contains alignment information across the entire genome.
-
-]
-.pull-right[
-<img src=./images/full_sv_view.png width=110%>
-]
-
-???
-
-Similar to an IGV
-
----
-
-# Viewing your loupe-file
-
-Live Demonstration on a HPC.
-
-Steps:
-1. Allocate a node (be greedy)
-2. Copy all your .loupe files to a local space on the HPC node.
-3. Start the loupe application.
-4. ssh in (with binding) into that node.
-
-All code in the comments (press p)
-
-???
-
-Homozygous deletion:
-chr3:129,663,385-129,863,385
-
-Heterozygous deletion:
-chr1:152,355,549-152,755,549
-check the linked reads tab as well for this one.
-
-Duplication:
-chr16:34,080,000-34,880,000;chr16:34,230,000-35,030,000
-chr6:0-626,484;chr6:0-626,484
-
-Homo INV:
-chr12:17,723,137-18,123,137;chr12:17,813,072-18,213,072
-`ssh username@headnode`
-`screen`
-`srun --mem=100G --time=2-0 --pty bash`
-`export LOUPE_SERVER=/path/to/loupe files`
-`start-loupe.sh`
-
-`ssh -L3000:127.0.0.1:3000 username@workernode`
-
----
-
-# List of 10X resources used today
-
-.pull-left[
-Miscellaneous:
-*  [ssh-bind ports](https://help.ubuntu.com/community/SSH/OpenSSH/PortForwarding)
-*  [screen](https://www.rackaid.com/blog/linux-screen-tutorial-and-how-to)
-*  [slurm](https://slurm.schedmd.com/quickstart.html)
-]
-
-.pull-right[
-10X related resources
-[10X video](https://10xgenomics.wistia.com/medias/2r0nal3n3j)
-[10X BAM Tags](https://support.10xgenomics.com/genome-exome/software/pipelines/latest/output/bam)
-[Loupe downloader](https://support.10xgenomics.com/genome-exome/software/downloads/latest)
-[NA12878 10X download](https://support.10xgenomics.com/genome-exome/datasets/2.2.1/NA12878_WGS_v2)
-]
-
----
+Singularity.
+Vagrant.
