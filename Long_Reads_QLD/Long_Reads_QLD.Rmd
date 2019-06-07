@@ -162,9 +162,7 @@ class: long-slide
 Minimap2 is the standard aligner for ONT and PacBio genomic data.
 It's extremely fast and has some useful output.
 
-CAN BE BOTH PROMETHION AND PACBIO
-
-MAYBE TODO Add in slide with minimap2 and nglmr
+MAYBE TODO Add in slide with minimap2 and nglmr, or put this in the SV slide.
 
 ---
 
@@ -208,7 +206,7 @@ class: ont-slide
 
 ???
 
-PROMETHION SPECIFIC
+Not just the algorithm, but the training data it ahas been exposed to. We often see that the quality of human data to be a bit higher than other data sets.
 
 ---
 
@@ -322,7 +320,6 @@ class: ont-slide
 [Docs](https://nanoporetech.github.io/tombo/tutorials.html)
 ]
 
-
 ???
 
 NANOPORE SPECIFIC
@@ -378,7 +375,7 @@ Simple fastq to assembly notebook.
 
 ???
 
-NANOPORE SPECIFIC
+These linkes are a little old but the data application is still relevant. File input is now close to multi-fast5s
 
 ---
 
@@ -391,10 +388,11 @@ class: pacbio-slide
 ???
 
 Greater maturity in bioinformatics components. Much of what needs to be done can be done via the smrtlink.
-Read number restricted by the number of wells.
-Provide estimates of sequencing length and 
+Read number restricted by the number of wells - rather than the amount of sequencing. Data comes out as a really large movie that is then converted to unaligned bam files.
+Provide estimates of sequencing length and yield from slides. 
 
 # TODO
+Need an intro-type 
 Add expected yields in here
 ADD https://www.youtube.com/watch?v=WMZmG00uhwU&feature=youtu.be to link
 Add image https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&ved=2ahUKEwiMqM-Z5c_iAhVCVH0KHUsACRsQjRx6BAgBEAU&url=https%3A%2F%2Fgithub.com%2Fben-lerch%2FCCS-3.0%2Fblob%2Fmaster%2FREADME.md&psig=AOvVaw1pDeCoQNzBw6_3pbCJqCIc&ust=1559736446254122
@@ -404,6 +402,12 @@ Add image https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&ved=
 # Introduction to SMRTLINK
 
 Bioinformatics at a click-of-a-button!
+Easy stand-alone workflows that cover much of the capability of the device.
+BAM to CSS.
+Assembly.
+SV Calling
+SNP and INDEL calling on long-range amplicons.
+
 
 ???
 
@@ -433,13 +437,20 @@ https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&ved=2ahUKEwj6s
 
 ???
 
-Utilisation of CCS, full-length transcriptome.
+Utilisation of CCS, full-length transcriptome. Goes through many times allowing for full assembly.
+
+# TODO 
+Find short read comparison. Exon proportions slide to place in.
 
 ---
 
 # SV Calling with PacBio
 
 ???
+
+# TODO
+Easy work with SMRTLINK but can create your own command as well.
+Get a picture of ngmlr vs minimap2.
 
 https://www.pacb.com/products-and-services/analytical-software/whole-genome-sequencing/
 https://github.com/fritzsedlazeck/Sniffles
@@ -452,6 +463,7 @@ https://github.com/EichlerLab/smrtsv2
 
 ???
 
+TODO:
 LAA amplicons can resolve haplotyping information and assembly of small important regions. Reducing the cost of sequencing yield whilst also increasing coverage of the important region.
 
 ---
@@ -460,8 +472,11 @@ LAA amplicons can resolve haplotyping information and assembly of small importan
 
 ???
 
+#TODO 
 Talk about Flye, wtdg2 and then hgap4.
-What can be done with the overall layout
+What can be done with the overall layout and consensus, copy from the previous work at nanopore dunedin.
+Add in the links completed by Ben Langmead.
+Picture of bandage in here. Length L law torsten seeman.
 
 ---
 
@@ -478,9 +493,13 @@ Yield vs accuracy trade-off in per-flowcell
 
 ## ONT - R10 pore, greater accuracy, targeted approach in development
 
+
 ## PacBio - Greater yield, more wells per flowcell.
 
 
+???
+
+Like the rivalry between Microsoft and Apple, two different operating systems with different pros and cons have focused hard on overcoming their cons, essentially resulting in two products which are now close to identical.
 
 ---
 
@@ -488,6 +507,6 @@ Yield vs accuracy trade-off in per-flowcell
 
 ???
 
-
+SMRTLINK On Demand. - coming soon.
 Singularity.
 Vagrant.
