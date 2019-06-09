@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html>
   <head>
     <title>Beyond Short Read Sequencing</title>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
     <meta name="author" content="Alexis Lucattini" />
     <link rel="stylesheet" href="libs\remark-css-0.0.1\Long_Reads_QLD.css" type="text/css" />
   </head>
@@ -12,7 +12,7 @@ class: center, middle, inverse, title-slide
 
 # Beyond Short Read Sequencing
 ## Applications of Long Reads
-### Alexis Lucattini
+### <a href="mailto:%20Alexis.Lucattini@agrf.org.au">Alexis Lucattini</a>
 ### Mon 10 Jun 2019
 
 ---
@@ -30,8 +30,8 @@ class: center, middle, inverse, title-slide
 
 .pull-right[
 .large[Platforms]
-* ONT &lt;img src=./images/ont_logo.png width=20%&gt;
-* PacBio &lt;img src=./images/pacbio_logo.png width=20%&gt;
+* ONT &lt;img src=./images/ont_logo.jpg width=20%&gt;
+* PacBio &lt;img src=./images/pb_logo.png width=20%&gt;
 ]
 
 
@@ -43,22 +43,31 @@ With short read sequencing, haplotyping information can be conveyed as long as t
 Both ONT and PacBio offer single-molecule sequencing, the DNA is not amplified prior to entering the flowcell meaning additional modifications such as methylation can be detected with high coverage.
 More commonly long-reads are known for resolving scaffolds for genome assembly. Short-reads simply cannot overcome repeat regions longer than their read-length.
 
-# TODO 
-Add ONT and Pacbio image on the columns tag
+---
 
-# ALL TODOS
-PACBIO TOOLS -
-HOW DOES THE PACBIO WORK?
-GENOME ASSEMBLIES
-STRUCUTURAL VARIATION TOOLS
-ONT AND PACBIO DATASETS
-VAGRANT VM
+# Sample Prep requirements
+
+.pull-left[
+.baby-bear[
+* Molarity != Concentration
+* Avoid spin-column base extraction
+* Remove impurities
+* Additional clean-ups may be needed
+]
+]
+
+.pull-right[
+&lt;img src='images/tape_station.png' width=120%&gt;
+]
+
+???
 
 ---
 
 class: long-slide
 
 ## Bioinformatics is a bottleneck
+
 * Novel file types 
   + multi-fast5s
   + unaligned BAMs
@@ -133,7 +142,8 @@ class: long-slide
 
 ???
 
-CAN BE BOth PROMETHION AND PACBIO
+Minimap2 is the standard aligner for ONT and PacBio genomic data.
+It can also be used with short-reads as its significantly faster than bwa but seems to not be as impressive just yet.
 
 ---
 
@@ -162,10 +172,19 @@ class: long-slide
 
 ???
 
-Minimap2 is the standard aligner for ONT and PacBio genomic data.
-It's extremely fast and has some useful output.
+CS tag is an extremely useful output.
 
-MAYBE TODO Add in slide with minimap2 and nglmr, or put this in the SV slide.
+---
+
+class: ont-slide
+
+# Nanopore sequencing
+
+[&lt;img src='images/ont_sequencing_thumbnail.jpg' width=80%&gt;](https://www.youtube.com/watch?v=GUb1TZvMWsw)
+
+???
+
+DNA current is negatively charged, the DNA passes through a positively charged membrane and this results in change in current across the channel. Different nucleotides are different sizes and this results in difference changes in current levels. Any given current state is not the state of a single nucleotide but of around 5-6 nucleotides in a given pore at a given time, this leads to some complexion about determining a given sequence of bases.
 
 ---
 
@@ -179,8 +198,8 @@ class: ont-slide
 * Single-molecule
 * Real-time
 * Portable
-* Low accuracy
-* Lower yields
+* Accuracy ~= 85-95%
+* Yields ~= 20 - 100 Gb
 ]
 
 .pull-right[
@@ -190,9 +209,9 @@ class: ont-slide
 * Relatively expensive per base
 ]
 
-# TODO
+???
 
-Place ONT VIDEO in here
+Yields and accuracies are extemely sample dependent
 
 ---
 
@@ -200,7 +219,7 @@ class: ont-slide
 
 ## Basecalling methods
 ### GPU &amp; CPU.
-* GPUs much faster. .small[Guppy 1.8.3 is the current basecalling version]
+* GPUs much faster. .small[Guppy 3.1.5 is the current basecalling version]
 
 * Different algorithms give slightly different results.
 
@@ -233,7 +252,7 @@ The wub package contains a large range of plotting tools,
 for nanopore sequencing. 
 
 Some of the plots aren't perfect but everything comes out in a picklable.
-These can be easily repimported into python and be re-plotted.
+These can be easily repimported into python and be re-plotted using the matplotlib or seaborn modules. This way you can also retitle or recaption the plot as needed
 
 ---
 
@@ -278,7 +297,7 @@ class: ont-slide
 
 ???
 
-
+Nanoplot is well supported and can generate alignment plots, plots of fastq scores, yield plots over time. Yield plots over time can show if our sequencing pores have  been contaminated.
 
 ---
 
@@ -293,7 +312,7 @@ Ryan Wick's repos set for:
 
 ???
 
-NANOPORE SPECIFIC
+Ryan Wick from Bio21 has also generated many easy-to-run nanopore qc programs. Nanopore reads like all other sequencing reads have adapters, so please make sure you trim them prior to generating your assemblies.
 
 ---
 
@@ -308,7 +327,7 @@ Jared T. Simpson's [nanopolish](https://github.com/jts/nanopolish) uses signal-l
 
 ???
 
-NANOPORE SPECIFIC
+While fast5 data is clunky heavy and not user friendly, this doesn't mean you should through it a
 
 ---
 
@@ -391,7 +410,7 @@ class: pacbio-slide
 
 # Pacific Biosciences
 
-[&lt;img src=./images/pacbio_fridge.jpg width=80%&gt;](https://www.youtube.com/watch?v=WMZmG00uhwU&amp;feature=youtu.be)
+[&lt;img src=./images/pacbio_fridge.jpg width=60%&gt;](https://www.youtube.com/watch?v=WMZmG00uhwU&amp;feature=youtu.be)
 
 ???
 
@@ -401,24 +420,31 @@ Provide estimates of sequencing length and yield from slides.
 
 ---
 
+class: pacbio-slide
+
 # PacBio - PMI
 
 .pull-left[
+.baby-bear[
 **Technical**
 * Single-molecule
 * Sequence-by-replication approach
 * Long-reads with high consensus.
 * Well-supported bioinformatics
 * Finite limit of number-of-molecules.
-* Output:
-  + 10-25 Gbs Amplicon
-  + 5-10 Gbs gDNA - n50 10-15Kb
+]
 ]
 
 .pull-right[
+.baby-bear[
+**Outputs**
+* Output:
+  + 10-25 Gbs Amplicon
+  + 5-10 Gbs gDNA - n50 10-15Kb
 **Financial**
 * Large-start up cost.
 * Relatively expensive per base
+]
 ]
 
 ???
@@ -426,6 +452,8 @@ Provide estimates of sequencing length and yield from slides.
 The pacbio currently provides a comparable level of throughput to a MinION run but has benefits of having an improved error-rate and a reduction in systematic bias.
 
 ---
+
+class: pacbio-slide
 
 # Introduction to SMRTLINK
 
@@ -446,9 +474,11 @@ SMRTLINK and its associated command-line version offer scatter-gather algorithms
 
 ---
 
+class: pacbio-slide
+
 # Subread vs CCS Read 
 
-&lt;img src='image/subread_to_ccs.png', width=100%&gt;
+&lt;img src='images/subread_to_ccs.png', width=60%&gt;
 
 ???
 
@@ -459,6 +489,8 @@ Lima is a PacBio developed algorithm for converting subreads into concensus read
 
 ---
 
+class: pacbio-slide
+
 # PacBio IsoSeq
 
 .pull-left[
@@ -468,7 +500,7 @@ Lima is a PacBio developed algorithm for converting subreads into concensus read
 + Complex normalisation methods - pre-QC.
 ]
 .pull-right[
-&lt;img src='images/exone_in_genes.png' width=80%&gt;
+&lt;img src='images/exons_in_genes.png' width=100%&gt;
 ]
 
 ???
@@ -478,18 +510,23 @@ Find short read comparison. Exon proportions slide to place in.
 
 ---
 
+class: pacbio-slide
+
 # SV Calling with PacBio
 
 .pull-left[
 * PacBio supported pipeline is pbsv
-  + available in smrtlink.
+  + available in SMRTlink
+  + Scalable
+* Very low FDR
+* Polished breakpoints
+]
+.pull-right[
 * Other community-developed pipelines include:
   + [sniffles](https://github.com/fritzsedlazeck/Sniffles
 )
   + [smrtsv2](https://github.com/EichlerLab/smrtsv2
 )
-]
-.pull-right[
 * Both also compatible with ONT data.
 ]
 
@@ -498,61 +535,296 @@ Find short read comparison. Exon proportions slide to place in.
 Easy work with SMRTLINK but can use community pipelines as well.
 Get a picture of ngmlr vs minimap2.
 
-https://www.pacb.com/products-and-services/analytical-software/whole-genome-sequencing/
-https://github.com/fritzsedlazeck/Sniffles
-
+#TODO add to this slide if possible
+maybe restrictions in types of calls on pbsv
 
 ---
 
+class: pacbio-slide
+
 # Targeted Sequencing with PacBio
+
+.pull-left[
+**Uses:**
+* highly-polymorphic regions (HLA)
+* phasing
+* structural variation
+]
+
+.pull-right[
+.baby-bear[
+**Bioinformatics:**
+* Convert to CCS
+* Cluster-recluster approach
+  + Sort amplicons.
+  + Recluster within (Phasing)
+  + Build phasing consensus
+]
+]
 
 ???
 
-# TODO:
 LAA amplicons can resolve haplotyping information and assembly of small important regions. Reducing the cost of sequencing yield whilst also increasing coverage of the important region.
 
 ---
 
+class: long-slide
+
 # Denovo Assembly
+
+.pull-left[
+.baby-bear[
+**Four assemblers to watch**
+* [Canu](https://github.com/marbl/canu)
+* [Flye](https://github.com/fenderglass/Flye)
+* [wtdbg2 (colloquially prnounced called wobbly2)](https://github.com/ruanjue/wtdbg2)
+* [Falcon](https://github.com/PacificBiosciences/pb-assembly)
+]
+]
+
+.pull-right[
+.baby-bear[
+* Each are derivatives of similar approaches to assembly.
+* Two main approaches are:
+  + Overlap-layout-consensus
+  + kmer-based approach
+* Some can take a hybrid-approach to assembly.
+]
+]
 
 ???
 
-#TODO 
-Talk about Flye, wtdg2 and then hgap4.
-What can be done with the overall layout and consensus, copy from the previous work at nanopore dunedin.
-Add in the links completed by Ben Langmead.
-Picture of bandage in here. Length L law torsten seeman.
+Denovo assemblies will always be very hard, we'll go through why very soon. Here are four of the most-popular approaches, each come with pros and cons, trading off speed for accuracy and user-friend for customisable. Some allow a hybrid approach meaning more accurate short-reads can be used for 'polishing'
 
 ---
+
+class: long-slide
+
+# Assembly lingo
+.small[
+* k-mer:
+  + A sequence of length k.&lt;br&gt;&lt;br&gt;
+* Node:
+  + A short sequence or k-mer within the assembly that can be linked to other sequences.&lt;br&gt;&lt;br&gt;
+* Edges:
+  + A link between two sequences that have evidence of overlap.&lt;br&gt;&lt;br&gt;
+* Graphs:
+  + A visual representation of the sequence using edges and nodes.&lt;br&gt;&lt;br&gt;
+]
+
+---
+
+class: long-slide
+
+# Assembly lingo 2
+
+.pull-left[
+* Contig:
+  .baby-bear[
+  + An unambiguous* contiguous assembled sequence of the genome.
+  ]&lt;br&gt;&lt;br&gt;
+* Scaffold:
+  .baby-bear[
+  + A collection of contigs with known orientation.
+  ]
+]
+.pull-right[
+.center[&lt;img src="images/scaffolds.png" width="100%"&gt;]
+.tiny[Image credit [Torsten Seeman](http://bioinformatics.org.au/ws14/wp-content/uploads/ws14/sites/5/2014/07/Torsten-Seemann_presentation.pdf)]
+]
+
+
+---
+
+class: long-slide
+
+# Expectations vs Realities
+.center[
+&lt;img src="images/lots_of_edges.png" width="55%"&gt;
+]
+
+---
+
+class: long-slide
+
+# Assembly issues
+
+.pull-left[
+*Difficult*:
+.small[
+* Parallelisation is non-trivial.
+* Non-linear complexity.
+  + Each read is compared to each other read for overlaps.
+* non-haploid genomes are troublesome.
+]
+]
+.pull-right[
+*Impossible where*:
+.small[
+* Repeat-length &gt;
+  read-length
+
+]
+]
+.small[
+*The following slides have been inspired by Ben Langmead's lecture series, which you can find [here](http://www.langmead-lab.org/teaching-materials/)*
+]
+
+---
+
+class: long-slide
+
+## Assembly 1: de-Bruijn graphs
+
+.pull-left[
+.baby-bear[
+* Pronounced 'D-Brown'
+  + .tiny[source unknown, and irrelevant fact]&lt;br&gt;&lt;br&gt;
+* k-mer based path to infer assembly.&lt;br&gt;&lt;br&gt;
+* Genome:
+  + `a_long_long_long_time`&lt;br&gt;&lt;br&gt;
+* `k=5`
+]
+]
+.pull-right[
+.center[&lt;img src="images/de_bruijn_graphs.png" width="35%"&gt;]
+]
+
+---
+
+class: long-slide
+
+## Assembly 1: De-Bruijn graphs
+
+.pull-left[
+.baby-bear[
+**Pros**  
+Fast! - complexities:
+  + Space is `O(N)`
+  + Build time is `O(N)`
+]
+]
+.pull-right[
+**Cons**  
+.baby-bear[
+* Can't resolve repeats well.
+  + Bound by k-mer size. Always less than read-length.
+* Difficulty with read-errors.
+  + Exacerbated by PCR-amplification bias.
+]]
+
+---
+
+class: long-slide
+
+## Assembly 2: OLC.
+
+.pull-left[
+.baby-bear[
+1. Build an overlap graph:
+  + Locally align prefix of read X to suffix of read Y.
+2. Convert overlap stretches into contigs.
+3. Run a pileup consensus on the reads mapping to each contig.
+]
+]
+.pull-right[
+.center[&lt;img src="images/prefix_suffix.png", width="60%"&gt;]
+]
+
+---
+
+class: long-slide
+
+## Assembly 2: OLC.
+
+.pull-left[
+**Pros**
+1. Less sensitive to sequencing errors.
+2. Handles larger repeats
+3. Low specificity can bubbles.
+]
+.pull-right[
+**Cons**
+1. Overlapping reads is slow.
+  + Non-linear time complexity
+  + .small[`O(N^2); N=Num reads.`]
+2. Low specificity can cause graph errors.
+]
+
+---
+
+class: long-slide
+
+# Incomplete assemblies.
+
+.pull-left[
+## Useful for:
+* Gene quantification.
+* SNP detection.
+]
+
+.pull-right[
+## Work needed:
+* Structural annotation.
+* Structural translocations.
+* Copy number variation.
+]
+
+---
+
+class: long-slide
 
 # Final Remarks.
 
-???
-
-Not a one-size fits all approach.
-Yield vs accuracy trade-off in per-flowcell
+.pull-left[
+**ONT:**
+* Yields improving rapidly
+* Error rates an issue.
+* Needs focus on sample clean-up
+* Bioinformatics needs improvement
+]
+.pull-right[
+**PacBio:**
+* Yields need to improve 
+  + Yield per ZMW
+  + Wells per SMRTCell
+* Error rates resolved by greater depth
+* Big price-per-base
+]
 
 ---
+
+class: ont-slide
 
 # Future steps
 
-## ONT - R10 pore, greater accuracy, targeted approach in development
-
-
-## PacBio - Greater yield, more wells per flowcell.
-
+&lt;img src='images/r10_pore.jpg' width=90%&gt;
 
 ???
 
-Like the rivalry between Microsoft and Apple, two different operating systems with different pros and cons have focused hard on overcoming their cons, essentially resulting in two products which are now close to identical.
+Like the rivalry between Microsoft and Apple, two different operating systems with different pros and cons have focused hard on overcoming their cons, essentially resulting in two products which are now close to identical. Nanopore are looking at reinventing the way the way they peform sequencing with their new R10 pore shown in the diagram here. This is expected to place accuracy into the 95-97% range with a reduction in systematic bias in homopolymer areas. Patience may be required before seeing the final result, will need an overhaul in the models used to generate the basecalling.
+
+Targeted sequencing is also coming, using a crispr approach to ligate sequencing adapters onto the end of the target DNA.
 
 ---
 
-# Other things that may interest you
+class: pacbio-slide
 
-Working with Singularity.
-Working with Vagrant.
-SMRTLINK On Demand - email me and I'll give you a brief on how to set it up.
+# Future steps - PacBio
+
+&lt;img src='images/sequelII_promo.png' width=80%&gt;
+
+???
+
+PacBio also look forward to beyond the Sequel with the Sequel II, which is expected to see an 8-fold increase in the sequencing throughput holding 8X the number of SMRT cells of the current flowcells.
+
+---
+
+## Other interesting things
+
+[Working with Singularity.](https://alexiswl.github.io/presentations/HPC_and_Singularity/HPC_Singularity_Presentation.html)
+[Working with Vagrant.](https://alexiswl.github.io/presentations/Creating_A_Vagrant_Box/Creating_A_Vagrant_Box.html)
+SMRTLINK On Demand (coming soon) - [email me](mailto: Alexis.Lucattini@agrf.org.au) in the interim and I'll give you a brief on how to set it up on your HPC
 
 
 ???
@@ -563,14 +835,34 @@ Vagrant.
 
 ---
 
-# Thank you slide
-
-???
-
-#TODO
-Add thank yous
+.pull-left[
+.baby-bear[
+* R&amp;D:
+    + Kirby Siemering
+    + Jafar Jabbari&lt;br&gt;&lt;/br&gt;
+* Lab Ops:
+    + Matthew Tinning&lt;br&gt;&lt;/br&gt;
+* IT:
+    + Chris Hunt
+    + Douglas Morrison
+    + Gismon Thomas&lt;br&gt;&lt;/br&gt;
+* Accounts:
+    + Desley Pitcher
+    + Claire Story
+    + Saurabh Shrivastava&lt;br&gt;&lt;/br&gt;
+]
+]
+.pull-right[
+.baby-bear[
+* WEHI
+    + Steven Wilcox
+    + Matthew Ritchie
+    + Quentin Gouil
+    + Scott Gigante
+    + Chris Woodruff
+]
+]
     </textarea>
-<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "pygments",
@@ -580,57 +872,16 @@ Add thank yous
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
 });
-(function(d) {
-  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
   if (!r) return;
   s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
   d.head.appendChild(s);
-})(document);
-
-(function(d) {
-  var el = d.getElementsByClassName("remark-slides-area");
-  if (!el) return;
-  var slide, slides = slideshow.getSlides(), els = el[0].children;
-  for (var i = 1; i < slides.length; i++) {
-    slide = slides[i];
-    if (slide.properties.continued === "true" || slide.properties.count === "false") {
-      els[i - 1].className += ' has-continuation';
-    }
-  }
-  var s = d.createElement("style");
-  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
-  d.head.appendChild(s);
-})(document);
-// delete the temporary CSS (for displaying all slides initially) when the user
-// starts to view slides
-(function() {
-  var deleted = false;
-  slideshow.on('beforeShowSlide', function(slide) {
-    if (deleted) return;
-    var sheets = document.styleSheets, node;
-    for (var i = 0; i < sheets.length; i++) {
-      node = sheets[i].ownerNode;
-      if (node.dataset["target"] !== "print-only") continue;
-      node.parentNode.removeChild(node);
-    }
-    deleted = true;
-  });
 })();</script>
 
 <script>
 (function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
-
-<script>
-slideshow._releaseMath = function(el) {
-  var i, text, code, codes = el.getElementsByTagName('code');
+  var i, text, code, codes = document.getElementsByTagName('code');
   for (i = 0; i < codes.length;) {
     code = codes[i];
     if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
@@ -644,8 +895,7 @@ slideshow._releaseMath = function(el) {
     }
     i++;
   }
-};
-slideshow._releaseMath(document);
+})();
 </script>
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
