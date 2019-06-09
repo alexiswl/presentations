@@ -30,9 +30,8 @@ class: center, middle, inverse, title-slide
 
 .pull-right[
 .large[Platforms]
-* ONT
-* PacBio
-* 10X*
+* ONT &lt;img src=./images/ont_logo.png width=20%&gt;
+* PacBio &lt;img src=./images/pacbio_logo.png width=20%&gt;
 ]
 
 
@@ -43,6 +42,9 @@ What are the benefits of long reads.
 With short read sequencing, haplotyping information can be conveyed as long as there's no homogeneity for 300 bps. This often means that a SNP on one exon cannot be determined to be linked to a SNP on another exon for a given individual.
 Both ONT and PacBio offer single-molecule sequencing, the DNA is not amplified prior to entering the flowcell meaning additional modifications such as methylation can be detected with high coverage.
 More commonly long-reads are known for resolving scaffolds for genome assembly. Short-reads simply cannot overcome repeat regions longer than their read-length.
+
+# TODO 
+Add ONT and Pacbio image on the columns tag
 
 # ALL TODOS
 PACBIO TOOLS -
@@ -79,11 +81,13 @@ Denovo assemblies will remain really hard as labs try to complete tasks in the m
 
 ---
 
+class: long-slide
+
 ## New methods for standard tasks
 .pull-left[
 .baby-bear[
 **Basecalling**
-* Signal to Base
+* Compressed Signal Data
 * Local alignments
 
 **Data QC**
@@ -112,6 +116,8 @@ While the standard fastq format is still used, getting to fastqs is not trivial.
 
 ---
 
+class: long-slide
+
 # Minimap2
 
 * Current gold-standard aligner for ONT and PacBio genomic data.
@@ -130,6 +136,8 @@ While the standard fastq format is still used, getting to fastqs is not trivial.
 CAN BE BOth PROMETHION AND PACBIO
 
 ---
+
+class: long-slide
 
 # The CS tag and MD tag
 .pull-left[
@@ -157,11 +165,11 @@ CAN BE BOth PROMETHION AND PACBIO
 Minimap2 is the standard aligner for ONT and PacBio genomic data.
 It's extremely fast and has some useful output.
 
-CAN BE BOTH PROMETHION AND PACBIO
-
-MAYBE TODO Add in slide with minimap2 and nglmr
+MAYBE TODO Add in slide with minimap2 and nglmr, or put this in the SV slide.
 
 ---
+
+class: ont-slide
 
 ## Nanopore Sequencing - PMI
 
@@ -174,6 +182,7 @@ MAYBE TODO Add in slide with minimap2 and nglmr
 * Low accuracy
 * Lower yields
 ]
+
 .pull-right[
 **Financial**
 * Minimal start-up cost
@@ -187,6 +196,8 @@ Place ONT VIDEO in here
 
 ---
 
+class: ont-slide
+
 ## Basecalling methods
 ### GPU &amp; CPU.
 * GPUs much faster. .small[Guppy 1.8.3 is the current basecalling version]
@@ -198,9 +209,11 @@ Place ONT VIDEO in here
 
 ???
 
-PROMETHION SPECIFIC
+Not just the algorithm, but the training data it a has been exposed to. We often see that the quality of human data to be a bit higher than other data sets.
 
 ---
+
+class: ont-slide
 
 ## WUB
 * Software package repository from ONT.
@@ -216,9 +229,15 @@ PROMETHION SPECIFIC
 
 ???
 
-NANOPORE SPECIFIC
+The wub package contains a large range of plotting tools,  
+for nanopore sequencing. 
+
+Some of the plots aren't perfect but everything comes out in a picklable.
+These can be easily repimported into python and be re-plotted.
 
 ---
+
+class: ont-slide
 
 ## WUB cont.
 
@@ -232,10 +251,12 @@ NANOPORE SPECIFIC
 
 ???
 
-NANOPORE SPECIFIC
+We've seen that the mapping rates 
 
 
 ---
+
+class: ont-slide
 
 ## NanoPlot
 
@@ -257,9 +278,11 @@ NANOPORE SPECIFIC
 
 ???
 
-NANOPORE SPECIFIC
+
 
 ---
+
+class: ont-slide
 
 ## Porechop, Filtlong, Unicycler
 
@@ -274,12 +297,14 @@ NANOPORE SPECIFIC
 
 ---
 
+class: ont-slide
+
 # Nanopolish
 
 Jared T. Simpson's [nanopolish](https://github.com/jts/nanopolish) uses signal-level (fast5) data to:
 * Detecting methylation
 * Calling SNP level variants
-* Polishing genomes
+* Polishing genomes through consensus
 
 ???
 
@@ -303,13 +328,13 @@ class: ont-slide
 [Docs](https://nanoporetech.github.io/tombo/tutorials.html)
 ]
 
-
 ???
 
 NANOPORE SPECIFIC
 
 ---
 
+class: ont-slide
 
 ## Haplotyping-methylation combo
 
@@ -330,6 +355,8 @@ NANOPORE SPECIFIC
 
 ---
 
+class: ont-slide
+
 ## AGRF PromethION in focus
 
 Kit-9, sample sensitive, great N50!
@@ -343,6 +370,8 @@ Kit-9, sample sensitive, great N50!
 
 ---
 
+class: ont-slide
+
 ## Some tutorial references
 
 [Tim Kahlke - Toast 2018](https://github.com/timkahlke/toast2018)  
@@ -354,8 +383,7 @@ Simple fastq to assembly notebook.
 
 ???
 
-NANOPORE SPECIFIC
-
+These linkes are a little old but the data application is still relevant. File input is now close to multi-fast5s
 
 ---
 
@@ -363,34 +391,64 @@ class: pacbio-slide
 
 # Pacific Biosciences
 
-
+[&lt;img src=./images/pacbio_fridge.jpg width=80%&gt;](https://www.youtube.com/watch?v=WMZmG00uhwU&amp;feature=youtu.be)
 
 ???
 
 Greater maturity in bioinformatics components. Much of what needs to be done can be done via the smrtlink.
-Read number restricted by the number of wells.
+Read number restricted by the number of wells - rather than the amount of sequencing. Data comes out as a really large movie that is then converted to unaligned bam files.
+Provide estimates of sequencing length and yield from slides. 
 
-# TODO
-ADD https://www.youtube.com/watch?v=WMZmG00uhwU&amp;feature=youtu.be to link
-Add image https://www.google.com/url?sa=i&amp;rct=j&amp;q=&amp;esrc=s&amp;source=images&amp;cd=&amp;ved=2ahUKEwiMqM-Z5c_iAhVCVH0KHUsACRsQjRx6BAgBEAU&amp;url=https%3A%2F%2Fgithub.com%2Fben-lerch%2FCCS-3.0%2Fblob%2Fmaster%2FREADME.md&amp;psig=AOvVaw1pDeCoQNzBw6_3pbCJqCIc&amp;ust=1559736446254122
+---
+
+# PacBio - PMI
+
+.pull-left[
+**Technical**
+* Single-molecule
+* Sequence-by-replication approach
+* Long-reads with high consensus.
+* Well-supported bioinformatics
+* Finite limit of number-of-molecules.
+* Output:
+  + 10-25 Gbs Amplicon
+  + 5-10 Gbs gDNA - n50 10-15Kb
+]
+
+.pull-right[
+**Financial**
+* Large-start up cost.
+* Relatively expensive per base
+]
+
+???
+
+The pacbio currently provides a comparable level of throughput to a MinION run but has benefits of having an improved error-rate and a reduction in systematic bias.
 
 ---
 
 # Introduction to SMRTLINK
 
-Bioinformatics at a click-of-a-button.
+Bioinformatics at a click-of-a-button!
+* Easy stand-alone workflows 
+  + cover much of the capability of the device.
+  + runs scatter-gather workflows across an HPC
+* BAM to CSS.
+* SV Calling
+* De novo Assembly.
+* SNP and INDEL calling on long-range amplicons.
 
 ???
 
 Our SMRT-LINK runs on a singularity container, an is an on-demand device.
-
-
+So only running when we need it!
+SMRTLINK and its associated command-line version offer scatter-gather algorithms for each of the different services that we offer. I plan to put a link up on a mini-tutorial of how to set up your own SMRTLINK portal.
 
 ---
 
 # Subread vs CCS Read 
 
-
+&lt;img src='image/subread_to_ccs.png', width=100%&gt;
 
 ???
 
@@ -399,29 +457,50 @@ This increases the accuracy in the read with every additional cycle. Often with 
 
 Lima is a PacBio developed algorithm for converting subreads into concensus reads.
 
-https://www.google.com/url?sa=i&amp;rct=j&amp;q=&amp;esrc=s&amp;source=images&amp;cd=&amp;ved=2ahUKEwjV6anVoNLiAhWPeisKHayrDEYQjRx6BAgBEAU&amp;url=http%3A%2F%2Ffiles.pacb.com%2Fsoftware%2Fsmrtanalysis%2F2.2.0%2Fdoc%2Fsmrtportal%2Fhelp%2F!SSL!%2FWebhelp%2FPortal_PacBio_Glossary.htm&amp;psig=AOvVaw1PQHML_fwy1Bc8i-c0ekeN&amp;ust=1559821129992274
-
-Or
-https://www.google.com/url?sa=i&amp;rct=j&amp;q=&amp;esrc=s&amp;source=images&amp;cd=&amp;ved=2ahUKEwj6st7foNLiAhVTfH0KHbhKCBkQjRx6BAgBEAU&amp;url=http%3A%2F%2Ffiles.pacb.com%2Fsoftware%2Fsmrtanalysis%2F2.2.0%2Fdoc%2Fsmrtportal%2Fhelp%2F!SSL!%2FWebhelp%2FPortal_PacBio_Glossary.htm&amp;psig=AOvVaw1PQHML_fwy1Bc8i-c0ekeN&amp;ust=1559821129992274
-
 ---
 
 # PacBio IsoSeq
 
+.pull-left[
++ Full length transcripts.
++ High-consensus rates.
++ Well defined bioinformatics workflows.
++ Complex normalisation methods - pre-QC.
+]
+.pull-right[
+&lt;img src='images/exone_in_genes.png' width=80%&gt;
+]
+
 ???
 
-Utilisation of CCS, full-length transcriptome.
+Utilisation of CCS, full-length transcriptome. Goes through many times allowing for full assembly. Provide a picture of an entire gene for this slide.
+Find short read comparison. Exon proportions slide to place in.
 
 ---
 
 # SV Calling with PacBio
 
+.pull-left[
+* PacBio supported pipeline is pbsv
+  + available in smrtlink.
+* Other community-developed pipelines include:
+  + [sniffles](https://github.com/fritzsedlazeck/Sniffles
+)
+  + [smrtsv2](https://github.com/EichlerLab/smrtsv2
+)
+]
+.pull-right[
+* Both also compatible with ONT data.
+]
+
 ???
+
+Easy work with SMRTLINK but can use community pipelines as well.
+Get a picture of ngmlr vs minimap2.
 
 https://www.pacb.com/products-and-services/analytical-software/whole-genome-sequencing/
 https://github.com/fritzsedlazeck/Sniffles
 
-https://github.com/EichlerLab/smrtsv2
 
 ---
 
@@ -429,11 +508,20 @@ https://github.com/EichlerLab/smrtsv2
 
 ???
 
+# TODO:
 LAA amplicons can resolve haplotyping information and assembly of small important regions. Reducing the cost of sequencing yield whilst also increasing coverage of the important region.
 
 ---
 
-# Denovo Assembly Algorithms
+# Denovo Assembly
+
+???
+
+#TODO 
+Talk about Flye, wtdg2 and then hgap4.
+What can be done with the overall layout and consensus, copy from the previous work at nanopore dunedin.
+Add in the links completed by Ben Langmead.
+Picture of bandage in here. Length L law torsten seeman.
 
 ---
 
@@ -450,19 +538,37 @@ Yield vs accuracy trade-off in per-flowcell
 
 ## ONT - R10 pore, greater accuracy, targeted approach in development
 
+
 ## PacBio - Greater yield, more wells per flowcell.
 
 
+???
+
+Like the rivalry between Microsoft and Apple, two different operating systems with different pros and cons have focused hard on overcoming their cons, essentially resulting in two products which are now close to identical.
 
 ---
 
 # Other things that may interest you
 
+Working with Singularity.
+Working with Vagrant.
+SMRTLINK On Demand - email me and I'll give you a brief on how to set it up.
+
+
 ???
 
-
+SMRTLINK On Demand. - coming soon.
 Singularity.
 Vagrant.
+
+---
+
+# Thank you slide
+
+???
+
+#TODO
+Add thank yous
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
