@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
     <title>Beyond Short Read Sequencing</title>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <meta name="author" content="Alexis Lucattini" />
     <link rel="stylesheet" href="libs\remark-css-0.0.1\Long_Reads_QLD.css" type="text/css" />
   </head>
@@ -21,7 +21,7 @@ class: center, middle, inverse, title-slide
 ## Beyond Short Reads
 
 .pull-left[
-.large[Benefits]
+.large[**Benefits**]
 * Long-range haplotyping.
 * Methylation with single-molecule level sequencing.
 * Scaffolding and genome assembly
@@ -29,7 +29,7 @@ class: center, middle, inverse, title-slide
 ]
 
 .pull-right[
-.large[Platforms]
+.large[**Platforms**]
 * ONT &lt;img src=./images/ont_logo.jpg width=20%&gt;
 * PacBio &lt;img src=./images/pb_logo.png width=20%&gt;
 ]
@@ -62,6 +62,8 @@ More commonly long-reads are known for resolving scaffolds for genome assembly. 
 
 ???
 
+If you put in crap you will get out crap. Long-read sequencing technology can still process short-reads without fail however this will cause issues with your yield and your base n50.
+
 ---
 
 class: long-slide
@@ -70,17 +72,12 @@ class: long-slide
 
 * Novel file types 
   + multi-fast5s
-  + unaligned BAMs
-
-* Many ways to do one thing, benchmarking needed.
-
-* Getting help and resources, community still in development.
-
-* Denovo assemblies have always been really hard.
+  + unaligned BAMs&lt;br&gt;&lt;/br&gt;
+* Many ways to do one thing, benchmarking needed.&lt;br&gt;&lt;/br&gt;
+* Getting help and resources, community still in development.&lt;br&gt;&lt;/br&gt;
+* Denovo assemblies have always been really hard.&lt;br&gt;&lt;/br&gt;
 
 ???
-
-Class: ALL
 
 Notes:
 
@@ -206,7 +203,8 @@ class: ont-slide
 **Financial**
 * Minimal start-up cost
 * Cheap for small uses of data
-* Relatively expensive per base
+* Relatively expensive per base&lt;br&gt;&lt;/br&gt;
+&lt;img src='images/minion.png' width=40%&gt;
 ]
 
 ???
@@ -306,9 +304,9 @@ class: ont-slide
 ## Porechop, Filtlong, Unicycler
 
 Ryan Wick's repos set for:
-* [Demultiplexing / Trimming Adapters](https://github.com/rrwick/porechop)
-* [Removing poor quality reads](https://github.com/rrwick/filtlong)
-* [Generating Circular-hybrid assemblies](https://github.com/rrwick/unicycler)
+* [Demultiplexing / Trimming Adapters](https://github.com/rrwick/porechop)&lt;br&gt;&lt;/br&gt;
+* [Removing poor quality reads](https://github.com/rrwick/filtlong)&lt;br&gt;&lt;/br&gt;
+* [Generating Circular-hybrid assemblies](https://github.com/rrwick/unicycler)&lt;br&gt;&lt;/br&gt;
 
 ???
 
@@ -327,7 +325,7 @@ Jared T. Simpson's [nanopolish](https://github.com/jts/nanopolish) uses signal-l
 
 ???
 
-While fast5 data is clunky heavy and not user friendly, this doesn't mean you should through it a
+While fast5 data is clunky heavy and not user friendly, this doesn't mean you should throw it away, the squiggle information can be used in downstream information for methylation calling and polishing of alignments.
 
 ---
 
@@ -349,7 +347,6 @@ class: ont-slide
 
 ???
 
-NANOPORE SPECIFIC
 
 ---
 
@@ -362,7 +359,7 @@ class: ont-slide
 ]
 
 .pull-left[
-[BioRxiv Paper](https://www.biorxiv.org/content/early/2018/10/17/445924)
+[NAR Paper](https://academic.oup.com/nar/article/47/8/e46/5356940)
 ]
 .pull-right[
 [Scott's GitHub Haplotype-Methylome Repo](https://github.com/scottgigante/haplotyped-methylome)
@@ -584,7 +581,7 @@ class: long-slide
 
 .pull-right[
 .baby-bear[
-* Each are derivatives of similar approaches to assembly.
+* Each are derivatives from one of two methodologies.
 * Two main approaches are:
   + Overlap-layout-consensus
   + kmer-based approach
@@ -770,6 +767,10 @@ class: long-slide
 * Copy number variation.
 ]
 
+???
+
+Incomplete assemblies aren't completely useless, they can be useful for finding SNPs in a genome along with genome quantification.
+
 ---
 
 class: long-slide
@@ -822,9 +823,9 @@ PacBio also look forward to beyond the Sequel with the Sequel II, which is expec
 
 ## Other interesting things
 
-[Working with Singularity.](https://alexiswl.github.io/presentations/HPC_and_Singularity/HPC_Singularity_Presentation.html)
-[Working with Vagrant.](https://alexiswl.github.io/presentations/Creating_A_Vagrant_Box/Creating_A_Vagrant_Box.html)
-SMRTLINK On Demand (coming soon) - [email me](mailto: Alexis.Lucattini@agrf.org.au) in the interim and I'll give you a brief on how to set it up on your HPC
+* [Working with Singularity.](https://alexiswl.github.io/presentations/HPC_and_Singularity/HPC_Singularity_Presentation.html)
+* [Working with Vagrant.](https://alexiswl.github.io/presentations/Creating_A_Vagrant_Box/Creating_A_Vagrant_Box.html)
+* SMRTLINK On Demand (coming soon) - [email me](mailto: Alexis.Lucattini@agrf.org.au) in the interim and I'll give you a brief on how to set it up on your HPC
 
 
 ???
@@ -834,6 +835,8 @@ Singularity.
 Vagrant.
 
 ---
+
+## Thank you
 
 .pull-left[
 .baby-bear[
@@ -849,7 +852,7 @@ Vagrant.
 * Accounts:
     + Desley Pitcher
     + Claire Story
-    + Saurabh Shrivastava&lt;br&gt;&lt;/br&gt;
+    + Saurabh Shrivastava
 ]
 ]
 .pull-right[
@@ -863,6 +866,7 @@ Vagrant.
 ]
 ]
     </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "pygments",
@@ -872,16 +876,57 @@ Vagrant.
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
 });
-(function() {
-  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
   if (!r) return;
   s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
   d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
 })();</script>
 
 <script>
 (function() {
-  var i, text, code, codes = document.getElementsByTagName('code');
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
   for (i = 0; i < codes.length;) {
     code = codes[i];
     if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
@@ -895,7 +940,8 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     i++;
   }
-})();
+};
+slideshow._releaseMath(document);
 </script>
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
